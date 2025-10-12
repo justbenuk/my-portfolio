@@ -67,7 +67,7 @@ export default function LoadingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-neutral-950">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 pointer-events-none opacity-40"

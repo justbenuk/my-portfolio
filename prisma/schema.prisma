@@ -1,0 +1,242 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // or "mysql", "sqlite", etc.
+  url      = env("DATABASE_URL")
+}
+
+// Blog Post Model
+model Post {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  title     String
+  excerpt   String  @db.Text
+  content   String  @db.Text
+  published Boolean @default(false)
+  featured  Boolean @default(false)
+
+  // SEO fields
+  metaTitle       String?
+  metaDescription String?
+
+  // Media
+  image    String?
+  imageAlt String?
+
+  // Categorization
+  category String
+  tags     String[] // Array of tag strings
+
+  // Metadata
+  author   String  @default("Ben Andrews")
+  readTime String? // e.g., "8 min read"
+  views    Int     @default(0)
+
+  // Timestamps
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  comments Comment[]
+
+  @@index([slug])
+  @@index([published])
+  @@index([category])
+  @@index([publishedAt])
+  @@map("posts")
+}
+
+// Project/Work Model
+model Project {
+  id              String @id @default(cuid())
+  slug            String @unique
+  title           String
+  description     String @db.Text
+  fullDescription String @db.Text
+
+  // Status
+  published Boolean @default(false)
+  featured  Boolean @default(false)
+
+  // Media
+  image    String?
+  imageAlt String?
+  gallery  String[] // Array of image URLs
+
+  // Project details
+  category String // e.g., "Web Development", "Mobile App"
+  tags     String[] // Technologies used
+
+  // Links
+  liveUrl      String?
+  githubUrl    String?
+  caseStudyUrl String?
+
+  // Features and challenges (stored as JSON)
+  features     Json? // Array of feature strings
+  technologies Json? // Array of {name, description} objects
+  challenges   Json? // Array of {title, solution} objects
+
+  // Metadata
+  client      String?
+  duration    String? // e.g., "3 months"
+  completedAt DateTime?
+
+  // Stats
+  views Int @default(0)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([published])
+  @@index([featured])
+  @@index([category])
+  @@map("projects")
+}
+
+// Comment Model (for blog posts)
+model Comment {
+  id       String  @id @default(cuid())
+  content  String  @db.Text
+  author   String
+  email    String
+  approved Boolean @default(false)
+
+  // Relations
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([approved])
+  @@map("comments")
+}
+
+// Category Model (optional - if you want to manage categories separately)
+model Category {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+
+  // Type: "post" or "project"
+  type String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@map("categories")
+}
+
+// Tag Model (optional - if you want to manage tags separately)
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  // Type: "post" or "project"
+  type String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@map("tags")
+}
+
+// Newsletter Subscription Model (bonus)
+model Subscriber {
+  id     String  @id @default(cuid())
+  email  String  @unique
+  name   String?
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@map("subscribers")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String
+  email         String          @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}

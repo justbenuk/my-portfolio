@@ -4,15 +4,6 @@ import PageContainer from "@/components/shared/page-container";
 import { Code2, Sparkles, Zap, Rocket } from "lucide-react";
 
 export default function AboutPage() {
-  const skills = [
-    { name: "Next.js", level: 95 },
-    { name: "React", level: 95 },
-    { name: "TypeScript", level: 90 },
-    { name: "Tailwind CSS", level: 95 },
-    { name: "Prisma", level: 85 },
-    { name: "Node.js", level: 90 },
-  ];
-
   const features = [
     {
       icon: Code2,
@@ -40,8 +31,8 @@ export default function AboutPage() {
     <PageContainer>
       <div className="space-y-20">
         {/* Hero Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-          <div className="lg:col-span-2 flex justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-12 items-center">
+          <div className="lg:col-span-2 flex justify-center lg:justify-start">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition duration-500 animate-pulse-glow" />
               <div className="relative w-72 h-72 rounded-3xl overflow-hidden border-4 border-teal-500/20 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
@@ -50,7 +41,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:col-span-4 space-y-6">
             <div className="inline-block animate-fade-in-up">
               <span className="px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-sm font-medium">
                 About Me
@@ -112,39 +103,6 @@ export default function AboutPage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-
-        {/* Skills Section */}
-        <div className="space-y-8">
-          <h2 className="text-4xl font-bold text-center">
-            <span className="bg-gradient-to-r from-teal-300 to-cyan-400 text-transparent bg-clip-text">
-              Technical Skills
-            </span>
-          </h2>
-
-          <div className="max-w-3xl mx-auto space-y-6">
-            {skills.map((skill, index) => (
-              <div
-                key={index}
-                className="group animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="flex justify-between mb-2">
-                  <span className="text-white font-medium">{skill.name}</span>
-                  <span className="text-teal-400 font-semibold">{skill.level}%</span>
-                </div>
-                <div className="h-3 bg-white/5 rounded-full overflow-hidden backdrop-blur-sm border border-white/10">
-                  <div
-                    className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-1000 ease-out group-hover:shadow-lg group-hover:shadow-teal-500/50"
-                    style={{
-                      width: `${skill.level}%`,
-                      animation: "pulse-glow 2s ease-in-out infinite",
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 

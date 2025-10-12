@@ -2,33 +2,9 @@
 
 import PageContainer from "@/components/shared/page-container";
 import ContactForm from "@/forms/contact/contact-form";
-import { MailOpen, PhoneCall, MapPin, Send } from "lucide-react";
-import Link from "next/link";
+import { Send } from "lucide-react";
 
 export default function ContactPage() {
-  const contactMethods = [
-    {
-      icon: PhoneCall,
-      label: "Call Me",
-      value: "07916 019 809",
-      href: "tel://07916019809",
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      icon: MailOpen,
-      label: "Email",
-      value: "justbenuk@gmail.com",
-      href: "mailto://justbenuk@gmail.com",
-      color: "from-teal-500 to-cyan-500",
-    },
-    {
-      icon: MapPin,
-      label: "Location",
-      value: "Tamworth UK",
-      href: "/",
-      color: "from-purple-500 to-pink-500",
-    },
-  ];
 
   return (
     <PageContainer>
@@ -53,38 +29,6 @@ export default function ContactPage() {
           </p>
         </div>
 
-        {/* Contact Methods Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in-up animation-delay-600">
-          {contactMethods.map((method, index) => {
-            const Icon = method.icon;
-            return (
-              <Link
-                key={index}
-                href={method.href}
-                className="group relative p-6 rounded-2xl glass-effect hover:border-teal-500/50 transition-all duration-300 hover:scale-105 overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-
-                <div className="relative z-10 space-y-4">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${method.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <Icon className="w-7 h-7 text-white" />
-                  </div>
-
-                  <div className="space-y-1">
-                    <h3 className="text-lg font-semibold text-white">
-                      {method.label}
-                    </h3>
-                    <p className="text-slate-400 text-sm break-all">
-                      {method.value}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-500/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </Link>
-            );
-          })}
-        </div>
 
         {/* Form Section */}
         <div className="max-w-4xl mx-auto animate-fade-in-up animation-delay-800">

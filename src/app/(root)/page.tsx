@@ -124,14 +124,14 @@ export default function Home() {
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto animate-fade-in-up animation-delay-800">
           <div className="group p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-teal-500/50 transition-all duration-300 hover:scale-105">
             <div className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 text-transparent bg-clip-text">
-              5+
+              10+
             </div>
             <div className="mt-2 text-slate-300">Years Experience</div>
           </div>
 
           <div className="group p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-teal-500/50 transition-all duration-300 hover:scale-105">
             <div className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 text-transparent bg-clip-text">
-              50+
+              Many
             </div>
             <div className="mt-2 text-slate-300">Projects Completed</div>
           </div>
@@ -140,7 +140,7 @@ export default function Home() {
             <div className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 text-transparent bg-clip-text">
               100%
             </div>
-            <div className="mt-2 text-slate-300">Client Satisfaction</div>
+            <div className="mt-2 text-slate-300">Satisfaction</div>
           </div>
         </div>
       </div>

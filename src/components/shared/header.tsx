@@ -18,11 +18,10 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-lg shadow-teal-500/5"
-          : "bg-transparent"
-      }`}
+      className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
+        ? "backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-lg shadow-teal-500/5"
+        : "bg-transparent"
+        }`}
     >
       <div className="flex flex-row justify-between items-center px-6 py-4">
         <Link href="/" className="group">
@@ -47,6 +46,13 @@ export default function Header() {
               className="text-slate-300 hover:text-teal-400 transition-colors duration-200 font-medium"
             >
               Work
+            </Link>
+            <Link
+              href="/posts"
+
+              className="text-slate-300 hover:text-teal-400 transition-colors duration-200 font-medium"
+            >
+              Posts
             </Link>
             <Link
               href="/contact"
