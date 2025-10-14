@@ -26,7 +26,7 @@ export default function Header() {
       <div className="flex flex-row justify-between items-center px-6 py-4">
         <Link href="/" className="group">
           <h1 className="relative inline-block">
-            <span className="bg-gradient-to-r from-teal-300 via-teal-400 to-cyan-400 text-transparent bg-clip-text font-black text-2xl md:text-3xl tracking-tight transition-all duration-300 group-hover:scale-105 inline-block">
+            <span className="bg-gradient-to-r from-teal-300 via-teal-400 to-cyan-400 text-transparent bg-clip-text font-black text-xl tracking-tight transition-all duration-300 group-hover:scale-105 inline-block">
               Ben Andrews
             </span>
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-teal-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
