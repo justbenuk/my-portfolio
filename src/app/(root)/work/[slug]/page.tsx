@@ -1,9 +1,8 @@
-"use client";
-
 import PageContainer from "@/components/shared/page-container";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Github, Calendar, Tag } from "lucide-react";
 import { notFound } from "next/navigation";
+import { db } from "@/lib/db";
 
 const projects = [
   {
@@ -129,12 +128,22 @@ Built with scalability in mind, the application handles multiple concurrent user
   },
 ];
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = projects.find((p) => p.slug === params.slug);
+export default async function ProjectPage({ params }: { params: { slug: string } }) {
+  const project = await db.project.findUnique({
+    where: {
+      slug: params.slug,
+      published: true,
+    },
+  });
 
   if (!project) {
     notFound();
   }
+
+  // Parse features and technologies from JSON if they exist
+  const features = project.features ? (Array.isArray(project.features) ? project.features : []) : null;
+  const technologies = project.technologies ? (Array.isArray(project.technologies) ? project.technologies : []) : null;
+  const challenges = project.challenges ? (Array.isArray(project.challenges) ? project.challenges : []) : null;
 
   return (
     <PageContainer>
@@ -154,10 +163,12 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             <span className="px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-sm font-medium">
               {project.category}
             </span>
-            <div className="flex items-center gap-2 text-slate-400 text-sm">
-              <Calendar className="w-4 h-4" />
-              <span>{new Date(project.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-            </div>
+            {project.completedAt && (
+              <div className="flex items-center gap-2 text-slate-400 text-sm">
+                <Calendar className="w-4 h-4" />
+                <span>{new Date(project.completedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+              </div>
+            )}
           </div>
 
           <h1 className="text-5xl md:text-6xl font-black text-white">
@@ -216,11 +227,11 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             </div>
 
             {/* Features */}
-            {project.features && (
+            {features && features.length > 0 && (
               <div className="space-y-4 animate-fade-in-up animation-delay-700">
                 <h2 className="text-3xl font-bold text-white">Key Features</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {project.features.map((feature, index) => (
+                  {features.map((feature: any, index: number) => (
                     <div
                       key={index}
                       className="flex items-start gap-3 p-4 rounded-xl glass-effect"
@@ -234,10 +245,10 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             )}
 
             {/* Challenges */}
-            {project.challenges && (
+            {challenges && challenges.length > 0 && (
               <div className="space-y-6 animate-fade-in-up animation-delay-800">
                 <h2 className="text-3xl font-bold text-white">Challenges & Solutions</h2>
-                {project.challenges.map((challenge, index) => (
+                {challenges.map((challenge: any, index: number) => (
                   <div key={index} className="p-6 rounded-2xl glass-effect space-y-3">
                     <h3 className="text-xl font-semibold text-teal-400">
                       {challenge.title}
@@ -260,12 +271,14 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                 Technologies Used
               </h3>
               <div className="space-y-3">
-                {project.technologies?.map((tech, index) => (
-                  <div key={index} className="space-y-1">
-                    <div className="font-semibold text-white">{tech.name}</div>
-                    <div className="text-sm text-slate-400">{tech.description}</div>
-                  </div>
-                )) || (
+                {technologies && technologies.length > 0 ? (
+                  technologies.map((tech: any, index: number) => (
+                    <div key={index} className="space-y-1">
+                      <div className="font-semibold text-white">{tech.name}</div>
+                      <div className="text-sm text-slate-400">{tech.description}</div>
+                    </div>
+                  ))
+                ) : (
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
                       <span

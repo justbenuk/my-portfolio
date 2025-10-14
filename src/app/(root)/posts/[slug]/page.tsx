@@ -1,9 +1,10 @@
-"use client";
-
 import PageContainer from "@/components/shared/page-container";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Clock, Share2, User } from "lucide-react";
 import { notFound } from "next/navigation";
+import { db } from "@/lib/db";
+import CommentForm from "@/components/shared/comment-form";
+import CommentsList from "@/components/shared/comments-list";
 
 const blogPosts = [
   {
@@ -282,17 +283,34 @@ Stay tuned for more advanced Tailwind CSS techniques!
   },
 ];
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = blogPosts.find((p) => p.slug === params.slug);
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const post = await db.post.findUnique({
+    where: {
+      slug: params.slug,
+      published: true,
+    },
+  });
 
   if (!post) {
     notFound();
   }
 
   // Get related posts (same category, excluding current)
-  const relatedPosts = blogPosts
-    .filter((p) => p.category === post.category && p.slug !== post.slug)
-    .slice(0, 3);
+  const relatedPosts = await db.post.findMany({
+    where: {
+      published: true,
+      category: post.category,
+      NOT: { id: post.id },
+    },
+    take: 3,
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      excerpt: true,
+      category: true,
+    },
+  });
 
   return (
     <PageContainer>
@@ -330,12 +348,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                <span>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Draft'}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5" />
-                <span>{post.readTime}</span>
-              </div>
+              {post.readTime && (
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  <span>{post.readTime}</span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -440,6 +460,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             </div>
           </div>
         )}
+
+        {/* Comments Section */}
+        <div className="space-y-8 pt-12 border-t border-white/10">
+          <CommentsList postId={post.id} />
+          <CommentForm postId={post.id} />
+        </div>
 
         {/* CTA Section */}
         <div className="relative p-12 rounded-3xl overflow-hidden">

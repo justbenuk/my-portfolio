@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, Briefcase, Users, LogOut, Menu, X, Settings } from "lucide-react";
+import { LayoutDashboard, FileText, Briefcase, Users, MessageSquare, LogOut, Menu, X, Settings } from "lucide-react";
 import { useState } from "react";
 import { logoutUserAction } from "@/actions/auth-actions";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,11 @@ export default function DashboardSidebar({ user }: SidebarProps) {
       name: "Users",
       href: "/dashboard/users",
       icon: Users,
+    },
+    {
+      name: "Comments",
+      href: "/dashboard/comments",
+      icon: MessageSquare,
     },
   ];
 

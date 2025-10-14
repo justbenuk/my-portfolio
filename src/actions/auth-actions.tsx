@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 import { auth, signIn, signOut } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function registerUserAction(data: z.infer<typeof registerUserSchema>) {
   try {
@@ -48,11 +49,11 @@ export async function loginUserAction(data: z.infer<typeof loginUserSchema>) {
   }
 
   await signIn('credentials', {
-    redirect: false,
+    redirect: true,
     email: validated.email,
     password: validated.password
   })
-
+  revalidatePath('/login')
   return { success: true, message: 'User logged in' }
 
 }

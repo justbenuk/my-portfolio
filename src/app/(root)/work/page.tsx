@@ -1,86 +1,47 @@
-"use client";
-
 import PageContainer from "@/components/shared/page-container";
 import Link from "next/link";
 import { ExternalLink, Github } from "lucide-react";
+import { db } from "@/lib/db";
 
-const projects = [
-  {
-    id: 1,
-    slug: "ecommerce-platform",
-    title: "E-Commerce Platform",
-    description: "A full-featured e-commerce platform with cart, checkout, and payment integration",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=600&fit=crop",
-    tags: ["Next.js", "Prisma", "Stripe", "Tailwind CSS"],
-    category: "Web Development",
-    date: "2024-10",
-    featured: true,
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
-  },
-  {
-    id: 2,
-    slug: "portfolio-website",
-    title: "Creative Portfolio",
-    description: "A stunning portfolio website for a photographer with image galleries and contact forms",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-    tags: ["React", "TypeScript", "Framer Motion"],
-    category: "Design",
-    date: "2024-09",
-    featured: true,
-    liveUrl: "https://example.com",
-  },
-  {
-    id: 3,
-    slug: "task-management-app",
-    title: "Task Management App",
-    description: "A collaborative task management application with real-time updates and team features",
-    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop",
-    tags: ["Next.js", "PostgreSQL", "Socket.io"],
-    category: "Web App",
-    date: "2024-08",
-    featured: false,
-    githubUrl: "https://github.com",
-  },
-  {
-    id: 4,
-    slug: "restaurant-website",
-    title: "Restaurant Website",
-    description: "Modern restaurant website with online reservation system and menu management",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop",
-    tags: ["Next.js", "Tailwind CSS", "Sanity CMS"],
-    category: "Web Development",
-    date: "2024-07",
-    featured: false,
-    liveUrl: "https://example.com",
-  },
-  {
-    id: 5,
-    slug: "fitness-tracking-app",
-    title: "Fitness Tracking App",
-    description: "Track workouts, nutrition, and progress with detailed analytics and charts",
-    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop",
-    tags: ["React Native", "Firebase", "Chart.js"],
-    category: "Mobile App",
-    date: "2024-06",
-    featured: true,
-    liveUrl: "https://example.com",
-  },
-  {
-    id: 6,
-    slug: "blog-platform",
-    title: "Blog Platform",
-    description: "A modern blogging platform with markdown support and comment system",
-    image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=600&fit=crop",
-    tags: ["Next.js", "MDX", "Prisma"],
-    category: "Web Development",
-    date: "2024-05",
-    featured: false,
-    githubUrl: "https://github.com",
-  },
-];
-
-export default function WorkPage() {
+export default async function WorkPage() {
+  // Fetch projects from database
+  const [featuredProjects, allProjects] = await Promise.all([
+    db.project.findMany({
+      where: {
+        published: true,
+        featured: true,
+      },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        category: true,
+        tags: true,
+        image: true,
+        imageAlt: true,
+        liveUrl: true,
+        githubUrl: true,
+      },
+    }),
+    db.project.findMany({
+      where: { published: true },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        category: true,
+        tags: true,
+        image: true,
+        imageAlt: true,
+        liveUrl: true,
+        githubUrl: true,
+      },
+    }),
+  ]);
   return (
     <PageContainer>
       <div className="space-y-16">
@@ -108,7 +69,7 @@ export default function WorkPage() {
         <div className="space-y-8 animate-fade-in-up animation-delay-600">
           <h2 className="text-3xl font-bold text-white">Featured Projects</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {projects.filter(p => p.featured).map((project, index) => (
+            {featuredProjects.map((project, index) => (
               <Link
                 key={project.id}
                 href={`/work/${project.slug}`}
@@ -163,7 +124,7 @@ export default function WorkPage() {
         <div className="space-y-8">
           <h2 className="text-3xl font-bold text-white">All Projects</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, index) => (
+            {allProjects.map((project, index) => (
               <Link
                 key={project.id}
                 href={`/work/${project.slug}`}

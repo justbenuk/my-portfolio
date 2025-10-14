@@ -1,127 +1,64 @@
-"use client";
-
 import PageContainer from "@/components/shared/page-container";
 import Link from "next/link";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { db } from "@/lib/db";
+import PostsPagination from "@/components/shared/posts-pagination";
 
-const blogPosts = [
-  {
-    id: 1,
-    slug: "building-scalable-nextjs-apps",
-    title: "Building Scalable Next.js Applications",
-    excerpt: "Learn the best practices and patterns for building scalable applications with Next.js 15, including performance optimization and architecture decisions.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-10-15",
-    readTime: "8 min read",
-    category: "Web Development",
-    tags: ["Next.js", "React", "Performance"],
-    featured: true,
-    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=600&fit=crop",
-  },
-  {
-    id: 2,
-    slug: "mastering-tailwind-css",
-    title: "Mastering Tailwind CSS: Tips and Tricks",
-    excerpt: "Discover advanced Tailwind CSS techniques to speed up your development workflow and create beautiful, maintainable designs.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-10-08",
-    readTime: "6 min read",
-    category: "CSS",
-    tags: ["Tailwind CSS", "CSS", "Design"],
-    featured: true,
-    image: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?w=800&h=600&fit=crop",
-  },
-  {
-    id: 3,
-    slug: "typescript-best-practices",
-    title: "TypeScript Best Practices for 2024",
-    excerpt: "A comprehensive guide to writing better TypeScript code with modern patterns and type safety techniques.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-10-01",
-    readTime: "10 min read",
-    category: "TypeScript",
-    tags: ["TypeScript", "JavaScript", "Best Practices"],
-    featured: false,
-    image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&h=600&fit=crop",
-  },
-  {
-    id: 4,
-    slug: "react-server-components-explained",
-    title: "React Server Components Explained",
-    excerpt: "Understanding React Server Components and how they improve performance and developer experience in modern React applications.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-09-24",
-    readTime: "7 min read",
-    category: "React",
-    tags: ["React", "Next.js", "Server Components"],
-    featured: true,
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop",
-  },
-  {
-    id: 5,
-    slug: "database-design-principles",
-    title: "Database Design Principles Every Developer Should Know",
-    excerpt: "Essential database design principles and patterns to build robust, scalable data architectures.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-09-17",
-    readTime: "12 min read",
-    category: "Database",
-    tags: ["Database", "SQL", "Architecture"],
-    featured: false,
-    image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&h=600&fit=crop",
-  },
-  {
-    id: 6,
-    slug: "modern-css-layouts",
-    title: "Modern CSS Layouts with Grid and Flexbox",
-    excerpt: "Master CSS Grid and Flexbox to create responsive, flexible layouts without the complexity of traditional methods.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-09-10",
-    readTime: "9 min read",
-    category: "CSS",
-    tags: ["CSS", "Layout", "Responsive Design"],
-    featured: false,
-    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop",
-  },
-  {
-    id: 7,
-    slug: "api-security-best-practices",
-    title: "API Security Best Practices",
-    excerpt: "Protect your APIs with these essential security practices, from authentication to rate limiting and beyond.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-09-03",
-    readTime: "11 min read",
-    category: "Security",
-    tags: ["API", "Security", "Best Practices"],
-    featured: false,
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop",
-  },
-  {
-    id: 8,
-    slug: "optimizing-web-performance",
-    title: "The Ultimate Guide to Web Performance Optimization",
-    excerpt: "Comprehensive strategies for improving website performance, from image optimization to code splitting and caching.",
-    content: "",
-    author: "Ben Andrews",
-    date: "2024-08-27",
-    readTime: "15 min read",
-    category: "Performance",
-    tags: ["Performance", "Web Development", "Optimization"],
-    featured: false,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-  },
-];
+interface BlogPageProps {
+  searchParams: { page?: string };
+}
 
-export default function BlogPage() {
-  const featuredPosts = blogPosts.filter(post => post.featured);
-  const recentPosts = blogPosts.slice(0, 6);
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const currentPage = Number(searchParams.page) || 1;
+  const postsPerPage = 9;
+  const skip = (currentPage - 1) * postsPerPage;
+
+  // Fetch featured posts
+  const featuredPosts = await db.post.findMany({
+    where: {
+      published: true,
+      featured: true,
+    },
+    orderBy: { publishedAt: "desc" },
+    take: 2,
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      excerpt: true,
+      category: true,
+      image: true,
+      imageAlt: true,
+      readTime: true,
+      publishedAt: true,
+    },
+  });
+
+  // Fetch paginated posts
+  const [posts, totalPosts] = await Promise.all([
+    db.post.findMany({
+      where: { published: true },
+      orderBy: { publishedAt: "desc" },
+      skip,
+      take: postsPerPage,
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        excerpt: true,
+        category: true,
+        tags: true,
+        image: true,
+        imageAlt: true,
+        readTime: true,
+        publishedAt: true,
+      },
+    }),
+    db.post.count({ where: { published: true } }),
+  ]);
+
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
+  const recentPosts = posts.slice(0, 6);
 
   return (
     <PageContainer>
@@ -168,7 +105,7 @@ export default function BlogPage() {
                     </span>
                     <div className="flex items-center gap-2 text-slate-400">
                       <Calendar className="w-4 h-4" />
-                      <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                      <span>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Draft'}</span>
                     </div>
                   </div>
 
@@ -228,7 +165,7 @@ export default function BlogPage() {
 
                   <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
                     <Calendar className="w-3 h-3" />
-                    <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    <span>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Draft'}</span>
                   </div>
                 </div>
               </Link>
@@ -240,7 +177,7 @@ export default function BlogPage() {
         <div className="space-y-6">
           <h2 className="text-3xl font-bold text-white">All Articles</h2>
           <div className="space-y-4">
-            {blogPosts.map((post) => (
+            {posts.map((post) => (
               <Link
                 key={post.id}
                 href={`/posts/${post.slug}`}
@@ -257,12 +194,14 @@ export default function BlogPage() {
                     </span>
                     <div className="flex items-center gap-2 text-slate-400">
                       <Calendar className="w-4 h-4" />
-                      <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                      <span>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Draft'}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-400">
-                      <Clock className="w-4 h-4" />
-                      <span>{post.readTime}</span>
-                    </div>
+                    {post.readTime && (
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <Clock className="w-4 h-4" />
+                        <span>{post.readTime}</span>
+                      </div>
+                    )}
                   </div>
 
                   <h3 className="text-2xl font-bold text-white group-hover:text-teal-400 transition-colors">
@@ -291,6 +230,11 @@ export default function BlogPage() {
               </Link>
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <PostsPagination currentPage={currentPage} totalPages={totalPages} />
+          )}
         </div>
 
         {/* Newsletter CTA */}
