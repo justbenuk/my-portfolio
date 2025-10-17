@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import ProfileForm from "@/forms/portal/profile-form";
 import { User, Mail, Shield, Info } from "lucide-react";
+import Image from "next/image";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -27,10 +28,12 @@ export default async function ProfilePage() {
           <div className="flex flex-col md:flex-row items-center gap-6 mb-6 pb-6 border-b border-slate-800">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
               {session.user.image ? (
-                <img
+                <Image
                   src={session.user.image}
                   alt={session.user.name || "User"}
                   className="w-full h-full rounded-full object-cover"
+                  width={300}
+                  height={300}
                 />
               ) : (
                 <User className="w-10 h-10 text-white" />
@@ -77,6 +80,9 @@ export default async function ProfilePage() {
             <div>
               <p className="text-sm text-slate-500 mb-1">Account Type</p>
               <p className="text-slate-300 capitalize">{session.user.role}</p>
+            </div>
+            <div className="col-span-2 border-dashed border-2 p-6 border-red-500">
+              <p className="text-red-500">All changes will take affect after logout</p>
             </div>
           </div>
         </div>

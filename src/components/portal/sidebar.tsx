@@ -53,7 +53,7 @@ export default function PortalSidebar({ user }: SidebarProps) {
         <div className="p-4 border-b border-slate-800">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src={user.image as string} className="w-4 h-4" />
+              <AvatarImage src={user.image as string} />
               <AvatarFallback className="bg-gradient-to-br from-teal-500 to-cyan-500">BA</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">

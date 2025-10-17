@@ -1,16 +1,20 @@
 "use client";
 
 import { updateProfileAction } from "@/actions/profile-actions";
+import ProfileImageUploader from "@/components/images/profile-image-uploader";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { updateProfileSchema } from "@/validators/profile-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Mail, Image, Save } from "lucide-react";
+import { User, Mail, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
+import Image from "next/image";
+import { removeImageById } from "@/actions/image-actions";
+
 
 interface ProfileFormProps {
   user: {
@@ -39,6 +43,12 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } else {
       toast.success(message);
     }
+  }
+
+  async function handleRemoveImage() {
+    const imageUrl = form.getValues("image")
+    await removeImageById(imageUrl as string)
+    form.setValue("image", "")
   }
 
   return (
@@ -104,18 +114,20 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Field>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Image className="w-4 h-4 text-slate-500" />
-                      </div>
-                      <Input
-                        {...field}
-                        placeholder="Profile image URL (optional)"
-                        className="h-10 pl-10 bg-slate-800 border-slate-700 focus:border-teal-500 text-white placeholder:text-slate-500 rounded-lg"
-                      />
+                  {/* Use the field.value to conditionally render the image or uploader */}
+                  {field.value ? (
+                    <div className="relative w-full h-auto">
+                      <Image src={field.value} alt="Uploaded Crime Image" className="rounded-md object-cover" width={300} height={300} />
+                      <Button onClick={handleRemoveImage} variant="destructive" className="absolute top-2 right-2">
+                        Remove
+                      </Button>
                     </div>
-                  </Field>
+                  ) : (
+                    // Pass the `field.onChange` function to your component
+                    <div className="border border-dashed p-12">
+                      <ProfileImageUploader onImageUpload={field.onChange} />
+                    </div>
+                  )}
                 </FormControl>
                 <FieldError>
                   <FormMessage />
