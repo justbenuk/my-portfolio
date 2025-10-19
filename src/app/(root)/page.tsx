@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
+
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

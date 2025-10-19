@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createProjectSchema } from "@/validators/dashboard-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Briefcase, Link as LinkIcon, Image, Save, Tag, Github, ExternalLink, User, Clock } from "lucide-react";
+import { Link as LinkIcon, Image, Save, Tag, Github, ExternalLink, User, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";

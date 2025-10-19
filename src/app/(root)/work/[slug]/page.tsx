@@ -3,130 +3,53 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink, Github, Calendar, Tag } from "lucide-react";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
+import { Metadata } from "next";
+import { JsonValue } from "@prisma/client/runtime/library";
 
-const projects = [
-  {
-    id: 1,
-    slug: "ecommerce-platform",
-    title: "E-Commerce Platform",
-    description: "A full-featured e-commerce platform with cart, checkout, and payment integration",
-    fullDescription: `This comprehensive e-commerce platform was built to provide a seamless shopping experience for customers while giving administrators powerful tools to manage their inventory and orders.
+type Props = {
+  params: Promise<{ slug: string }>
+}
 
-The platform features a modern, responsive design that works flawlessly across all devices. Customers can browse products, add items to their cart, and complete purchases securely through Stripe integration.
+type Technology = {
+  name: string;
+  description: string;
+}
 
-Key features include real-time inventory management, order tracking, customer accounts, wishlist functionality, and advanced search with filters. The admin dashboard provides detailed analytics, sales reports, and easy product management.`,
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=1200&h=800&fit=crop",
-    tags: ["Next.js", "Prisma", "Stripe", "Tailwind CSS", "TypeScript", "PostgreSQL"],
-    category: "Web Development",
-    date: "2024-10",
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
-    features: [
-      "Secure payment processing with Stripe",
-      "Real-time inventory management",
-      "Customer account system",
-      "Order tracking and history",
-      "Admin dashboard with analytics",
-      "Product search and filtering",
-      "Wishlist and favorites",
-      "Responsive design",
-    ],
-    technologies: [
-      { name: "Next.js 15", description: "React framework for production" },
-      { name: "Prisma", description: "Database ORM" },
-      { name: "Stripe", description: "Payment processing" },
-      { name: "Tailwind CSS", description: "Utility-first CSS framework" },
-      { name: "PostgreSQL", description: "Database" },
-      { name: "TypeScript", description: "Type-safe JavaScript" },
-    ],
-    challenges: [
-      {
-        title: "Payment Integration",
-        solution: "Implemented Stripe webhooks for reliable payment confirmation and order processing, ensuring no orders are lost even if the user closes the browser.",
-      },
-      {
-        title: "Performance Optimization",
-        solution: "Used Next.js ISR (Incremental Static Regeneration) for product pages and implemented efficient caching strategies to handle high traffic.",
-      },
-    ],
-  },
-  {
-    id: 2,
-    slug: "portfolio-website",
-    title: "Creative Portfolio",
-    description: "A stunning portfolio website for a photographer with image galleries and contact forms",
-    fullDescription: `A visually stunning portfolio website designed for a professional photographer to showcase their work. The site emphasizes visual impact while maintaining fast load times and smooth interactions.
+type Challenge = {
+  title: string;
+  solution: string;
+}
 
-The design features elegant animations powered by Framer Motion, creating a memorable user experience without sacrificing performance. High-resolution images are optimized and lazy-loaded to ensure quick page loads.
+function isStringArray(value: JsonValue): value is string[] {
+  return Array.isArray(value) && value.every(item => typeof item === 'string');
+}
 
-The portfolio includes multiple galleries organized by category, a dedicated 'about' section, client testimonials, and an integrated contact form for booking inquiries.`,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop",
-    tags: ["React", "TypeScript", "Framer Motion", "Next.js", "Sanity CMS"],
-    category: "Design",
-    date: "2024-09",
-    liveUrl: "https://example.com",
-    features: [
-      "Image gallery with lightbox",
-      "Smooth page transitions",
-      "Category-based organization",
-      "Client testimonials section",
-      "Integrated contact form",
-      "Mobile-optimized viewing",
-      "SEO optimized",
-      "CMS for easy content updates",
-    ],
-    technologies: [
-      { name: "React", description: "UI library" },
-      { name: "Framer Motion", description: "Animation library" },
-      { name: "Sanity CMS", description: "Content management" },
-      { name: "Next.js", description: "React framework" },
-    ],
-    challenges: [
-      {
-        title: "Image Performance",
-        solution: "Implemented Next.js Image optimization with blur placeholders and lazy loading to maintain fast page speeds despite high-res images.",
-      },
-    ],
-  },
-  {
-    id: 3,
-    slug: "task-management-app",
-    title: "Task Management App",
-    description: "A collaborative task management application with real-time updates and team features",
-    fullDescription: `A powerful task management application designed for teams to collaborate effectively. Real-time updates ensure everyone stays in sync, and the intuitive interface makes project management effortless.
+function isTechnologyArray(value: JsonValue): value is Technology[] {
+  return Array.isArray(value) && value.every(item =>
+    typeof item === 'object' && item !== null && 'name' in item && 'description' in item
+  );
+}
 
-The app supports multiple projects, team members, task assignments, due dates, priorities, and comments. Real-time notifications keep team members informed of changes and mentions.
+function isChallengeArray(value: JsonValue): value is Challenge[] {
+  return Array.isArray(value) && value.every(item =>
+    typeof item === 'object' && item !== null && 'title' in item && 'solution' in item
+  );
+}
 
-Built with scalability in mind, the application handles multiple concurrent users and large project datasets efficiently.`,
-    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=800&fit=crop",
-    tags: ["Next.js", "PostgreSQL", "Socket.io", "TypeScript", "Prisma"],
-    category: "Web App",
-    date: "2024-08",
-    githubUrl: "https://github.com",
-    features: [
-      "Real-time collaboration",
-      "Task assignments and tracking",
-      "Project organization",
-      "Team member management",
-      "Due dates and reminders",
-      "Priority levels",
-      "Comment threads",
-      "Activity timeline",
-    ],
-    technologies: [
-      { name: "Next.js", description: "Full-stack framework" },
-      { name: "Socket.io", description: "Real-time communication" },
-      { name: "PostgreSQL", description: "Relational database" },
-      { name: "Prisma", description: "Database toolkit" },
-    ],
-    challenges: [
-      {
-        title: "Real-time Sync",
-        solution: "Implemented Socket.io for instant updates across all connected clients while maintaining database consistency.",
-      },
-    ],
-  },
-];
+export async function generatedMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+
+  const project = await db.project.findUnique({
+    where: {
+      slug,
+      published: true
+    }
+  })
+
+  return {
+    title: project?.title
+  }
+}
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
   const project = await db.project.findUnique({
@@ -141,9 +64,9 @@ export default async function ProjectPage({ params }: { params: { slug: string }
   }
 
   // Parse features and technologies from JSON if they exist
-  const features = project.features ? (Array.isArray(project.features) ? project.features : []) : null;
-  const technologies = project.technologies ? (Array.isArray(project.technologies) ? project.technologies : []) : null;
-  const challenges = project.challenges ? (Array.isArray(project.challenges) ? project.challenges : []) : null;
+  const features = project.features && isStringArray(project.features) ? project.features : null;
+  const technologies = project.technologies && isTechnologyArray(project.technologies) ? project.technologies : null;
+  const challenges = project.challenges && isChallengeArray(project.challenges) ? project.challenges : null;
 
   return (
     <PageContainer>
@@ -231,7 +154,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
               <div className="space-y-4 animate-fade-in-up animation-delay-700">
                 <h2 className="text-3xl font-bold text-white">Key Features</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {features.map((feature: any, index: number) => (
+                  {features.map((feature, index) => (
                     <div
                       key={index}
                       className="flex items-start gap-3 p-4 rounded-xl glass-effect"
@@ -248,7 +171,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
             {challenges && challenges.length > 0 && (
               <div className="space-y-6 animate-fade-in-up animation-delay-800">
                 <h2 className="text-3xl font-bold text-white">Challenges & Solutions</h2>
-                {challenges.map((challenge: any, index: number) => (
+                {challenges.map((challenge, index) => (
                   <div key={index} className="p-6 rounded-2xl glass-effect space-y-3">
                     <h3 className="text-xl font-semibold text-teal-400">
                       {challenge.title}
@@ -272,7 +195,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
               </h3>
               <div className="space-y-3">
                 {technologies && technologies.length > 0 ? (
-                  technologies.map((tech: any, index: number) => (
+                  technologies.map((tech, index) => (
                     <div key={index} className="space-y-1">
                       <div className="font-semibold text-white">{tech.name}</div>
                       <div className="text-sm text-slate-400">{tech.description}</div>

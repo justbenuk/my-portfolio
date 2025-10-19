@@ -1,6 +1,7 @@
 "use client";
 
-import { createPostAction } from "@/actions/dashboard-actions";
+import { updatePostAction } from "@/actions/dashboard-actions";
+import { removeImageById } from "@/actions/image-actions";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -8,29 +9,50 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createPostSchema } from "@/validators/dashboard-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link as LinkIcon, Image, Save, Tag } from "lucide-react";
+import { Link as LinkIcon, Save, Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
+import Image from 'next/image'
+import PostImageUploader from "@/components/images/post-image-uploader";
+import Editor from "@/components/shared/editor";
 
-export default function NewPostForm() {
+interface PostProps {
+  post: {
+    id: string
+    title: string
+    slug: string
+    excerpt: string
+    content: string
+    category: string
+    tags: string[]
+    published: boolean
+    featured: boolean
+    image: string | null
+    imageAlt: string | null
+    metaTitle: string | null
+    metaDescription: string | null
+  }
+}
+
+export default function EditPostForm({ post }: PostProps) {
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
-      title: '',
-      slug: '',
-      excerpt: '',
-      content: '',
-      category: '',
-      tags: '',
-      published: false,
-      featured: false,
-      image: '',
-      imageAlt: '',
-      metaTitle: '',
-      metaDescription: '',
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      category: post.category,
+      tags: post.tags.join(', '),
+      published: post.published,
+      featured: post.featured,
+      image: post.image ?? '',
+      imageAlt: post.imageAlt ?? '',
+      metaTitle: post.metaTitle ?? '',
+      metaDescription: post.metaDescription ?? '',
     }
   });
 
@@ -43,8 +65,14 @@ export default function NewPostForm() {
     form.setValue('slug', slug);
   };
 
+  async function handleRemoveImage() {
+    const imageUrl = form.getValues("image")
+    await removeImageById(imageUrl as string)
+    form.setValue("image", "")
+  }
+
   async function handleForm(values: z.infer<typeof createPostSchema>) {
-    const { success, message } = await createPostAction(values);
+    const { success, message } = await updatePostAction(values, post.id);
 
     if (!success) {
       toast.error(message);
@@ -198,12 +226,7 @@ export default function NewPostForm() {
                 <FormLabel className="text-slate-300">Content</FormLabel>
                 <FormControl>
                   <Field>
-                    <Textarea
-                      {...field}
-                      placeholder="Write your post content here..."
-                      rows={12}
-                      className="bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg resize-none"
-                    />
+                    <Editor value={field.value} onChange={field.onChange} />
                   </Field>
                 </FormControl>
                 <FieldError>
@@ -214,26 +237,26 @@ export default function NewPostForm() {
           />
 
           {/* Image and Alt Text */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-300">Featured Image URL</FormLabel>
                   <FormControl>
-                    <Field>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Image className="w-4 h-4 text-slate-500" />
-                        </div>
-                        <Input
-                          {...field}
-                          placeholder="https://example.com/image.jpg"
-                          className="h-10 pl-10 bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg"
-                        />
+                    {field.value ? (
+                      <div className="relative w-full h-auto">
+                        <Image src={field.value} alt="Uploaded Crime Image" className="rounded-md object-cover" width={300} height={300} />
+                        <Button onClick={handleRemoveImage} variant="destructive" className="absolute top-2 right-2">
+                          Remove
+                        </Button>
                       </div>
-                    </Field>
+                    ) : (
+                      // Pass the `field.onChange` function to your component
+                      <div className="border border-dashed p-12">
+                        <PostImageUploader onImageUpload={field.onChange} />
+                      </div>
+                    )}
                   </FormControl>
                   <FieldError>
                     <FormMessage />
@@ -359,7 +382,7 @@ export default function NewPostForm() {
               className="flex-1 h-10 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="mr-2 w-4 h-4" />
-              <span>{form.formState.isSubmitting ? "Creating..." : "Create Post"}</span>
+              <span>{form.formState.isSubmitting ? "Updating..." : "Update Post"}</span>
             </Button>
             <Button
               type="button"

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { db } from "@/lib/db";
 import PostsPagination from "@/components/shared/posts-pagination";
+import Image from "next/image";
 
 interface BlogPageProps {
   searchParams: { page?: string };
@@ -94,7 +95,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 className="group relative rounded-2xl overflow-hidden glass-effect hover:border-teal-500/50 transition-all duration-300 hover:scale-[1.02]"
               >
                 <div className="aspect-[16/9] relative overflow-hidden bg-slate-800">
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent z-10" />
+                  <Image src={post.image || ''} alt={post.imageAlt || 'post image'} width={1000} height={1000} className="w-full h-full" />
                   <div className="absolute inset-0 bg-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
                 </div>
 
@@ -142,7 +143,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
                 <div className="aspect-video relative overflow-hidden bg-slate-800">
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent z-10" />
+                  <Image src={post.image || ''} alt={post.imageAlt || 'post image'} width={1000} height={1000} className="w-full h-full" />
                   <div className="absolute inset-0 bg-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
                 </div>
 
@@ -184,6 +185,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 className="group flex flex-col md:flex-row gap-6 p-6 rounded-2xl glass-effect hover:border-teal-500/50 transition-all duration-300 hover:scale-[1.01] animate-fade-in-up"
               >
                 <div className="md:w-48 aspect-video rounded-xl overflow-hidden bg-slate-800 flex-shrink-0">
+                  <Image src={post.image || ''} alt={post.imageAlt || 'post image'} width={1000} height={1000} className="w-full h-full" />
                   <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800" />
                 </div>
 

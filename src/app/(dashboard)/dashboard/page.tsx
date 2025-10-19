@@ -1,14 +1,11 @@
-import { db } from "@/lib/db";
+import { getDashboardStats, getRecentPosts } from "@/actions/dashboard-actions";
+import RecentPostsTable from "@/components/dashboard/recent-posts-table";
 import { FileText, Briefcase, Users, Eye } from "lucide-react";
 
 export default async function DashboardPage() {
-  // Fetch stats
-  const [postsCount, projectsCount, usersCount, publishedPostsCount] = await Promise.all([
-    db.post.count(),
-    db.project.count(),
-    db.user.count(),
-    db.post.count({ where: { published: true } }),
-  ]);
+
+  const recentPosts = await getRecentPosts()
+  const [postsCount, projectsCount, usersCount, publishedPostsCount] = await getDashboardStats()
 
   const stats = [
     {
@@ -40,18 +37,6 @@ export default async function DashboardPage() {
       bgColor: "bg-cyan-500/10",
     },
   ];
-
-  // Fetch recent posts
-  const recentPosts = await db.post.findMany({
-    take: 5,
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      title: true,
-      published: true,
-      createdAt: true,
-    },
-  });
 
   return (
     <div className="p-6 lg:p-8">
@@ -86,32 +71,7 @@ export default async function DashboardPage() {
       <div className="bg-slate-900 border border-slate-800 rounded-lg p-6">
         <h2 className="text-xl font-bold text-white mb-4">Recent Posts</h2>
         <div className="space-y-3">
-          {recentPosts.length > 0 ? (
-            recentPosts.map((post) => (
-              <div
-                key={post.id}
-                className="flex items-center justify-between p-3 bg-slate-800 rounded-lg hover:bg-slate-750 transition-colors"
-              >
-                <div className="flex-1">
-                  <h3 className="text-white font-medium">{post.title}</h3>
-                  <p className="text-sm text-slate-400">
-                    {new Date(post.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    post.published
-                      ? "bg-green-500/10 text-green-400"
-                      : "bg-yellow-500/10 text-yellow-400"
-                  }`}
-                >
-                  {post.published ? "Published" : "Draft"}
-                </span>
-              </div>
-            ))
-          ) : (
-            <p className="text-slate-400 text-center py-4">No posts yet</p>
-          )}
+          <RecentPostsTable recentPosts={recentPosts} />
         </div>
       </div>
     </div>

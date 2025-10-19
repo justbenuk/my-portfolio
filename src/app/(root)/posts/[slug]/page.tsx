@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import CommentForm from "@/components/shared/comment-form";
 import CommentsList from "@/components/shared/comments-list";
+import Image from "next/image";
+import DOMPurify from "isomorphic-dompurify"
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const { slug } = await params
@@ -35,6 +37,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       category: true,
     },
   });
+
+  const sanitizedHtml = DOMPurify.sanitize(post.content)
+
 
   return (
     <PageContainer>
@@ -96,46 +101,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
           {/* Featured Image */}
           <div className="relative rounded-2xl overflow-hidden aspect-video bg-slate-800 animate-fade-in-up animation-delay-400">
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent z-10" />
+            <Image src={post.image as string} alt={post.imageAlt || 'post image'} width={1001} height={700} />
           </div>
 
           {/* Article Content */}
           <div className="prose prose-invert prose-lg max-w-none animate-fade-in-up animation-delay-600">
             <div className="space-y-6 text-slate-300 leading-relaxed">
-              {post.content.split('\n').map((paragraph, index) => {
-                if (paragraph.trim().startsWith('##')) {
-                  return (
-                    <h2 key={index} className="text-3xl font-bold text-white mt-12 mb-6">
-                      {paragraph.replace('##', '').trim()}
-                    </h2>
-                  );
-                }
-                if (paragraph.trim().startsWith('###')) {
-                  return (
-                    <h3 key={index} className="text-2xl font-bold text-white mt-8 mb-4">
-                      {paragraph.replace('###', '').trim()}
-                    </h3>
-                  );
-                }
-                if (paragraph.trim().startsWith('```')) {
-                  return null; // Handle code blocks separately if needed
-                }
-                if (paragraph.trim().startsWith('-')) {
-                  return (
-                    <li key={index} className="ml-6">
-                      {paragraph.replace('-', '').trim()}
-                    </li>
-                  );
-                }
-                if (paragraph.trim() === '') {
-                  return null;
-                }
-                return (
-                  <p key={index} className="text-lg">
-                    {paragraph}
-                  </p>
-                );
-              })}
+              <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} className="mt-10" />
             </div>
           </div>
 

@@ -42,6 +42,44 @@ export async function createUserAction(data: z.infer<typeof createUserSchema>) {
   }
 }
 
+export async function updatePostAction(data: z.infer<typeof createPostSchema>, id: string) {
+  try {
+    const validated = createPostSchema.parse(data);
+
+    const tagsArray = validated.tags
+      ? validated.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+      : [];
+
+    await db.post.update({
+      where: {
+        id: id
+      },
+      data: {
+        title: validated.title,
+        slug: validated.slug,
+        excerpt: validated.excerpt,
+        content: validated.content,
+        category: validated.category,
+        tags: tagsArray,
+        published: validated.published,
+        featured: validated.featured,
+        image: validated.image || null,
+        imageAlt: validated.imageAlt || null,
+        metaTitle: validated.metaTitle || null,
+        metaDescription: validated.metaDescription || null,
+      }
+    });
+
+    revalidatePath('/dashboard/posts');
+    revalidatePath('/posts');
+
+    return { success: true, message: 'Post created successfully' };
+  } catch (error) {
+    console.error('Create post error:', error);
+    return { success: false, message: 'Failed to create post' };
+  }
+}
+
 // Post Actions
 export async function createPostAction(data: z.infer<typeof createPostSchema>) {
   try {
@@ -86,6 +124,54 @@ export async function createPostAction(data: z.infer<typeof createPostSchema>) {
   } catch (error) {
     console.error('Create post error:', error);
     return { success: false, message: 'Failed to create post' };
+  }
+}
+
+export async function updateProjectAction(data: z.infer<typeof createProjectSchema>) {
+  try {
+    const validated = createProjectSchema.parse(data);
+
+    // Check if slug already exists
+    const existingProject = await db.project.findUnique({
+      where: { slug: validated.slug }
+    });
+
+    if (existingProject) {
+      return { success: false, message: 'Slug is already in use' };
+    }
+
+    // Parse tags from comma-separated string to array
+    const tagsArray = validated.tags
+      ? validated.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+      : [];
+
+    await db.project.create({
+      data: {
+        title: validated.title,
+        slug: validated.slug,
+        description: validated.description,
+        fullDescription: validated.fullDescription,
+        category: validated.category,
+        tags: tagsArray,
+        published: validated.published,
+        featured: validated.featured,
+        image: validated.image || null,
+        imageAlt: validated.imageAlt || null,
+        liveUrl: validated.liveUrl || null,
+        githubUrl: validated.githubUrl || null,
+        client: validated.client || null,
+        duration: validated.duration || null,
+        completedAt: validated.published ? new Date() : null,
+      }
+    });
+
+    revalidatePath('/dashboard/projects');
+    revalidatePath('/work');
+
+    return { success: true, message: 'Project created successfully' };
+  } catch (error) {
+    console.error('Create project error:', error);
+    return { success: false, message: 'Failed to create project' };
   }
 }
 
@@ -136,4 +222,28 @@ export async function createProjectAction(data: z.infer<typeof createProjectSche
     console.error('Create project error:', error);
     return { success: false, message: 'Failed to create project' };
   }
+}
+
+export async function getRecentPosts() {
+  const recentPosts = await db.post.findMany({
+    take: 10,
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      title: true,
+      published: true,
+      createdAt: true,
+    },
+  });
+  return recentPosts
+}
+
+export async function getDashboardStats() {
+  const [postsCount, projectsCount, usersCount, publishedPostsCount] = await Promise.all([
+    db.post.count(),
+    db.project.count(),
+    db.user.count(),
+    db.post.count({ where: { published: true } }),
+  ]);
+  return [postsCount, projectsCount, usersCount, publishedPostsCount]
 }

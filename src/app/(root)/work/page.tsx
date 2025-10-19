@@ -1,7 +1,12 @@
+import type { Metadata } from 'next';
 import PageContainer from "@/components/shared/page-container";
 import Link from "next/link";
 import { ExternalLink, Github } from "lucide-react";
 import { db } from "@/lib/db";
+
+export const metadata: Metadata = {
+  title: 'My Work'
+};
 
 export default async function WorkPage() {
   // Fetch projects from database

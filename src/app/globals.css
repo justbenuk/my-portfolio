@@ -10,6 +10,10 @@ html, body {
   font-family: "Poppins", sans-serif;
 }
 
+p{
+  padding: 10px 0px
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

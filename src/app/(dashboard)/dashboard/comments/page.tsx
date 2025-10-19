@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { MessageSquare, CheckCircle, XCircle, Trash2 } from "lucide-react";
+import { MessageSquare, CheckCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { approveCommentAction, deleteCommentAction } from "@/actions/comment-actions";
 
