@@ -1,6 +1,8 @@
 'use server'
 
 import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
+import { isAdminAction } from "./auth-actions";
 
 export async function fetchAllPosts(take?: number) {
   try {
@@ -27,8 +29,34 @@ export async function fetchAllPosts(take?: number) {
     console.error(error)
   }
 }
+export async function fetchSinglePostBySlug(slug: string) {
+  try {
+    const post = await db.post.findFirst({
+      where: {
+        slug
+      }
+    })
 
-export async function fetchSinglePost({ id }: { id: string }) {
+    if (!post) {
+      return null
+    }
+
+    await db.post.update({
+      where: {
+        id: post.id
+      },
+      data: {
+        views: + 1
+      }
+    })
+
+    return post
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function fetchSinglePostById({ id }: { id: string }) {
   try {
     const post = await db.post.findFirst({
       where: {
@@ -36,8 +64,26 @@ export async function fetchSinglePost({ id }: { id: string }) {
       }
     })
 
+    if (!post) {
+      return null
+    }
+
     return post
   } catch (error) {
     console.error(error)
+  }
+}
+
+export async function deletePostById(id: string) {
+  await isAdminAction()
+  try {
+    await db.post.delete({
+      where: { id }
+    })
+    revalidatePath('/dashboard/posts')
+    return { success: true, message: 'Post deleted' }
+  } catch (error) {
+    console.error(error)
+    return { success: false, message: 'Failed to delete post' }
   }
 }

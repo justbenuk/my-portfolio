@@ -8,6 +8,7 @@ import { Badge } from "../ui/badge"
 import { EyeIcon, EyeOffIcon, PencilIcon } from "lucide-react"
 import { Button } from "../ui/button"
 import Link from "next/link"
+import DeletePost from "./delete-post"
 
 interface PostProps {
   id: string,
@@ -28,8 +29,6 @@ interface PostsProps {
 export default function AllPostsTable({ posts }: PostsProps) {
   const data = posts || []
   const columnHelper = createColumnHelper<PostProps>()
-
-  console.log(posts)
 
   const columns = [
     columnHelper.accessor('title', {
@@ -73,6 +72,7 @@ export default function AllPostsTable({ posts }: PostsProps) {
                 <PencilIcon className="text-yellow-500" />
               </Link>
             </Button>
+            <DeletePost id={info.row.original.id} />
           </div>
         )
       }

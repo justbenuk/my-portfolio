@@ -1,6 +1,9 @@
 "use client";
 
 import { createPostAction } from "@/actions/dashboard-actions";
+import { removeImageById } from "@/actions/image-actions";
+import PostImageUploader from "@/components/images/post-image-uploader";
+import Editor from "@/components/shared/editor";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -8,11 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createPostSchema } from "@/validators/dashboard-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link as LinkIcon, Image, Save, Tag } from "lucide-react";
+import { Link as LinkIcon, Save, Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
+import Image from 'next/image'
 
 export default function NewPostForm() {
   const router = useRouter();
@@ -42,6 +46,12 @@ export default function NewPostForm() {
       .replace(/(^-|-$)/g, '');
     form.setValue('slug', slug);
   };
+
+  async function handleRemoveImage() {
+    const imageUrl = form.getValues("image")
+    await removeImageById(imageUrl as string)
+    form.setValue("image", "")
+  }
 
   async function handleForm(values: z.infer<typeof createPostSchema>) {
     const { success, message } = await createPostAction(values);
@@ -136,7 +146,6 @@ export default function NewPostForm() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="tags"
@@ -198,12 +207,7 @@ export default function NewPostForm() {
                 <FormLabel className="text-slate-300">Content</FormLabel>
                 <FormControl>
                   <Field>
-                    <Textarea
-                      {...field}
-                      placeholder="Write your post content here..."
-                      rows={12}
-                      className="bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg resize-none"
-                    />
+                    <Editor value={field.value} onChange={field.onChange} />
                   </Field>
                 </FormControl>
                 <FieldError>
@@ -214,26 +218,26 @@ export default function NewPostForm() {
           />
 
           {/* Image and Alt Text */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1  gap-4">
             <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-300">Featured Image URL</FormLabel>
                   <FormControl>
-                    <Field>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Image className="w-4 h-4 text-slate-500" />
-                        </div>
-                        <Input
-                          {...field}
-                          placeholder="https://example.com/image.jpg"
-                          className="h-10 pl-10 bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg"
-                        />
+                    {field.value ? (
+                      <div className="relative w-full h-auto">
+                        <Image src={field.value} alt="Uploaded Crime Image" className="rounded-md object-cover" width={300} height={300} />
+                        <Button onClick={handleRemoveImage} variant="destructive" className="absolute top-2 right-2">
+                          Remove
+                        </Button>
                       </div>
-                    </Field>
+                    ) : (
+                      // Pass the `field.onChange` function to your component
+                      <div className="border border-dashed p-12">
+                        <PostImageUploader onImageUpload={field.onChange} />
+                      </div>
+                    )}
                   </FormControl>
                   <FieldError>
                     <FormMessage />

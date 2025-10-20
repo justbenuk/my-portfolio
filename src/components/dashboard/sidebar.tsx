@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, Briefcase, Users, MessageSquare, LogOut } from "lucide-react";
+import { LayoutDashboard, FileText, Briefcase, Users, MessageSquare, LogOut, ListIcon } from "lucide-react";
 import { logoutUserAction } from "@/actions/auth-actions";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
@@ -47,6 +47,11 @@ export default function DashboardSidebar({ user }: SidebarProps) {
       href: "/dashboard/comments",
       icon: MessageSquare,
     },
+    {
+      name: "Categories",
+      href: "/dashboard/categories",
+      icon: ListIcon
+    }
   ];
 
   const handleLogout = async () => {
@@ -70,9 +75,9 @@ export default function DashboardSidebar({ user }: SidebarProps) {
                 <AvatarFallback>BA</AvatarFallback>
               </Avatar>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{user.name}</p>
-              <p className="text-xs text-slate-400 truncate capitalize">{user.role}</p>
+            <div className="flex-1 min-w-0 flex flex-col">
+              <span className="text-sm font-medium text-white truncate">{user.name}</span>
+              <span className="text-xs text-slate-400 truncate capitalize">{user.role}</span>
             </div>
           </div>
         </div>

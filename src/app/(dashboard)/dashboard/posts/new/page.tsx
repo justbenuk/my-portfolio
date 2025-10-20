@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import NewPostForm from "@/forms/dashboard/new-post-form";
+import DashboardTitle from '@/components/dashboard/dashboard-title';
+
+export const metadata: Metadata = {
+  title: 'New Blog Post'
+};
 
 export default function NewPostPage() {
   return (
@@ -14,8 +20,7 @@ export default function NewPostPage() {
           <ArrowLeft className="w-4 h-4" />
           Back to Posts
         </Link>
-        <h1 className="text-3xl font-bold text-white mb-2">Create New Post</h1>
-        <p className="text-slate-400">Write a new blog post or article</p>
+        <DashboardTitle title='Create New Post' description='Write a new blog post or article' />
       </div>
 
       {/* Form */}

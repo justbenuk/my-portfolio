@@ -7,9 +7,9 @@ type GlobalTableProps<T> = {
 
 export default function GlobalTable<T>({ table }: GlobalTableProps<T>) {
   return (
-    <div className="border rounded-2xl overflow-hidden">
+    <div className="border overflow-hidden">
       <Table>
-        <TableHeader className="bg-muted">
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (

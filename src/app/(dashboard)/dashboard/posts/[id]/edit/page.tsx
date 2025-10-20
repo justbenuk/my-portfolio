@@ -1,11 +1,16 @@
+import type { Metadata } from 'next';
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { fetchSinglePost } from "@/actions/posts-actions";
+import { fetchSinglePostById } from "@/actions/posts-actions";
 import EditPostForm from "@/forms/dashboard/edit-post-form";
+
+export const metadata: Metadata = {
+  title: 'Edit Post'
+};
 
 export default async function EditPostPage({ params }: { params: { id: string } }) {
   const id = await params
-  const post = await fetchSinglePost(id)
+  const post = await fetchSinglePostById(id)
   if (!post) return null
 
   return (

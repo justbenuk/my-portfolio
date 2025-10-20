@@ -7,19 +7,16 @@ import CommentForm from "@/components/shared/comment-form";
 import CommentsList from "@/components/shared/comments-list";
 import Image from "next/image";
 import DOMPurify from "isomorphic-dompurify"
+import { fetchSinglePostBySlug } from "@/actions/posts-actions";
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const { slug } = await params
-  const post = await db.post.findUnique({
-    where: {
-      slug: slug,
-      published: true,
-    },
-  });
 
+  const post = await fetchSinglePostBySlug(slug)
   if (!post) {
-    notFound();
+    return notFound()
   }
+
 
   // Get related posts (same category, excluding current)
   const relatedPosts = await db.post.findMany({
