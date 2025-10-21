@@ -7,14 +7,14 @@ interface Category {
   name: string
   slug: string
   type: string
-  description: string
+  description: string | null
   createdAt: Date
   updatedAt: Date
 }
 
-export default function CategoryPopup({ type, category }: { type: string, category: Category }) {
+export default function CategoryPopup({ type, category }: { type: string, category?: Category }) {
 
-  if (type === 'edit') {
+  if (type === 'edit' && category) {
     return (
       <Dialog>
         <EditCategoryForm category={category} />

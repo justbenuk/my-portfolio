@@ -17,8 +17,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
 import Image from 'next/image'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CategoryListProps } from "@/types";
 
-export default function NewPostForm() {
+export default function NewPostForm({ categories }: CategoryListProps) {
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(createPostSchema),
@@ -133,11 +135,16 @@ export default function NewPostForm() {
                   <FormLabel className="text-slate-300">Category</FormLabel>
                   <FormControl>
                     <Field>
-                      <Input
-                        {...field}
-                        placeholder="Technology"
-                        className="h-10 bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg"
-                      />
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger>
+                          <SelectValue defaultValue={field.value} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((item, idx) => (
+                            <SelectItem key={idx} value={item.name}>{item.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
                   </FormControl>
                   <FieldError>

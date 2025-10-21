@@ -17,6 +17,9 @@ import z from "zod";
 import Image from 'next/image'
 import PostImageUploader from "@/components/images/post-image-uploader";
 import Editor from "@/components/shared/editor";
+import { CategoryListProps } from "@/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Category } from "@prisma/client";
 
 interface PostProps {
   post: {
@@ -36,7 +39,12 @@ interface PostProps {
   }
 }
 
-export default function EditPostForm({ post }: PostProps) {
+interface Props {
+  post: PostProps['post'],
+  categories: CategoryListProps['categories']
+}
+
+export default function EditPostForm({ post, categories }: Props) {
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(createPostSchema),
@@ -151,11 +159,16 @@ export default function EditPostForm({ post }: PostProps) {
                   <FormLabel className="text-slate-300">Category</FormLabel>
                   <FormControl>
                     <Field>
-                      <Input
-                        {...field}
-                        placeholder="Technology"
-                        className="h-10 bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg"
-                      />
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger>
+                          <SelectValue defaultValue={field.value} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((item) => (
+                            <SelectItem key={item.id} value={item.name}>{item.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
                   </FormControl>
                   <FieldError>

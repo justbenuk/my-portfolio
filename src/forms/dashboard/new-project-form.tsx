@@ -1,20 +1,25 @@
 "use client";
 
 import { createProjectAction } from "@/actions/dashboard-actions";
+import { removeImageById } from "@/actions/image-actions";
+import PostImageUploader from "@/components/images/post-image-uploader";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { CategoryListProps } from "@/types";
 import { createProjectSchema } from "@/validators/dashboard-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link as LinkIcon, Image, Save, Tag, Github, ExternalLink, User, Clock } from "lucide-react";
+import { Link as LinkIcon, Save, Tag, Github, ExternalLink, User, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
+import Image from 'next/image'
 
-export default function NewProjectForm() {
+export default function NewProjectForm({ categories }: CategoryListProps) {
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(createProjectSchema),
@@ -54,6 +59,12 @@ export default function NewProjectForm() {
       toast.success(message);
       router.push('/dashboard/projects');
     }
+  }
+
+  async function handleRemoveImage() {
+    const imageUrl = form.getValues("image")
+    await removeImageById(imageUrl as string)
+    form.setValue("image", "")
   }
 
   return (
@@ -125,11 +136,16 @@ export default function NewProjectForm() {
                   <FormLabel className="text-slate-300">Category</FormLabel>
                   <FormControl>
                     <Field>
-                      <Input
-                        {...field}
-                        placeholder="Web Development"
-                        className="h-10 bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg"
-                      />
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger>
+                          <SelectValue defaultValue={field.value} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((item) => (
+                            <SelectItem key={item.name} value={item.name}>{item.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
                   </FormControl>
                   <FieldError>
@@ -279,20 +295,20 @@ export default function NewProjectForm() {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-300">Featured Image URL</FormLabel>
                   <FormControl>
-                    <Field>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Image className="w-4 h-4 text-slate-500" />
-                        </div>
-                        <Input
-                          {...field}
-                          placeholder="https://example.com/image.jpg"
-                          className="h-10 pl-10 bg-slate-800 border-slate-700 focus:border-purple-500 text-white placeholder:text-slate-500 rounded-lg"
-                        />
+                    {field.value ? (
+                      <div className="relative w-full h-auto">
+                        <Image src={field.value} alt="Uploaded Crime Image" className="rounded-md object-cover" width={300} height={300} />
+                        <Button onClick={handleRemoveImage} variant="destructive" className="absolute top-2 right-2">
+                          Remove
+                        </Button>
                       </div>
-                    </Field>
+                    ) : (
+                      // Pass the `field.onChange` function to your component
+                      <div className="border border-dashed p-12">
+                        <PostImageUploader onImageUpload={field.onChange} />
+                      </div>
+                    )}
                   </FormControl>
                   <FieldError>
                     <FormMessage />

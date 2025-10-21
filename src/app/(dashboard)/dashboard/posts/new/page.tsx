@@ -3,12 +3,15 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import NewPostForm from "@/forms/dashboard/new-post-form";
 import DashboardTitle from '@/components/dashboard/dashboard-title';
+import { fetchAllCategorysByType } from '@/actions/category-actions';
 
 export const metadata: Metadata = {
   title: 'New Blog Post'
 };
 
-export default function NewPostPage() {
+export default async function NewPostPage() {
+  const categories = await fetchAllCategorysByType('post')
+
   return (
     <div className="p-6 lg:p-8">
       {/* Header */}
@@ -26,7 +29,7 @@ export default function NewPostPage() {
       {/* Form */}
       <div className="max-w-4xl">
         <div className="bg-slate-900 border border-slate-800 rounded-lg p-6">
-          <NewPostForm />
+          <NewPostForm categories={categories} />
         </div>
       </div>
     </div>

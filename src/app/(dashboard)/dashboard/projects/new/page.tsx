@@ -1,8 +1,11 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import NewProjectForm from "@/forms/dashboard/new-project-form";
+import { fetchAllCategorysByType } from "@/actions/category-actions";
 
-export default function NewProjectPage() {
+export default async function NewProjectPage() {
+  const categories = await fetchAllCategorysByType('work')
+  console.log(categories)
   return (
     <div className="p-6 lg:p-8">
       {/* Header */}
@@ -21,7 +24,7 @@ export default function NewProjectPage() {
       {/* Form */}
       <div className="max-w-4xl">
         <div className="bg-slate-900 border border-slate-800 rounded-lg p-6">
-          <NewProjectForm />
+          <NewProjectForm categories={categories} />
         </div>
       </div>
     </div>

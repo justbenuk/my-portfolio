@@ -80,3 +80,12 @@ export async function deleteCateforyById(categoryId: string) {
   })
   revalidatePath('/dashboard/categories')
 }
+
+export async function fetchAllCategorysByType(type: string) {
+  const categories = await db.category.findMany({
+    where: {
+      type: type
+    }
+  })
+  return categories
+}

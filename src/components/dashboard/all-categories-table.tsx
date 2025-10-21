@@ -10,7 +10,7 @@ interface CategoryProps {
   id: string
   name: string
   slug: string
-  description: string
+  description: string | null
   type: string
   createdAt: Date
   updatedAt: Date

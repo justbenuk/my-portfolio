@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { fetchSinglePostById } from "@/actions/posts-actions";
 import EditPostForm from "@/forms/dashboard/edit-post-form";
+import { fetchAllCategorysByType } from '@/actions/category-actions';
 
 export const metadata: Metadata = {
   title: 'Edit Post'
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default async function EditPostPage({ params }: { params: { id: string } }) {
   const id = await params
   const post = await fetchSinglePostById(id)
+  const categories = await fetchAllCategorysByType('post')
   if (!post) return null
 
   return (
@@ -31,7 +33,7 @@ export default async function EditPostPage({ params }: { params: { id: string } 
       {/* Form */}
       <div className="max-w-4xl">
         <div className="bg-slate-900 border border-slate-800 rounded-lg p-6">
-          <EditPostForm post={post} />
+          <EditPostForm post={post} categories={categories} />
         </div>
       </div>
     </div>
