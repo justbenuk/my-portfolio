@@ -6,26 +6,39 @@ import z from "zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Button } from "../ui/button"
-import { PlusIcon } from "lucide-react"
+import { TrashIcon } from "lucide-react"
 import { FieldError, FieldLabel } from "../ui/field"
 import { Input } from "../ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select"
 import { SelectValue } from "@radix-ui/react-select"
-import { createCategoryAction } from "@/actions/category-actions"
+import { updateCategoryAction } from "@/actions/category-actions"
 import { toast } from "react-toastify"
 
-export default function EditCategoryForm() {
+interface CategoryProps {
+  category: {
+    id: string
+    name: string
+    slug: string
+    description: string | '' | null
+    type: string
+    createdAt: Date
+    updatedAt: Date
+  }
+}
+
+export default function EditCategoryForm({ category }: CategoryProps) {
+  console.log(category)
   const form = useForm<z.infer<typeof createcategorySchema>>({
     resolver: zodResolver(createcategorySchema),
     defaultValues: {
-      name: '',
-      description: '',
-      type: ''
+      name: category.name,
+      description: category.description || '',
+      type: category.type
     }
   })
 
   async function handleForm(values: z.infer<typeof createcategorySchema>) {
-    const { success, message } = await createCategoryAction(values)
+    const { success, message } = await updateCategoryAction(values, category.id)
     if (!success) {
       toast.error(message)
     } else {
@@ -36,11 +49,10 @@ export default function EditCategoryForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleForm)} id="add">
+      <form onSubmit={form.handleSubmit(handleForm)} id={category.id}>
         <DialogTrigger asChild>
-          <Button variant={'ghost'} className="flex flex-row items-center gap-4 bg-teal-500">
-            <PlusIcon />
-            <span>New Category</span>
+          <Button variant={'outline'} size={'sm'} className="text-yellow-500">
+            <TrashIcon />
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -85,9 +97,9 @@ export default function EditCategoryForm() {
                 <FormItem>
                   <FieldLabel>Type</FieldLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue="field.value">
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder='type' />
+                        <SelectValue defaultValue={field.value} />
                       </SelectTrigger>
                       <SelectContent className="w-full">
                         <SelectItem value="post">Post</SelectItem>
@@ -106,7 +118,7 @@ export default function EditCategoryForm() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" form="add">Add Category</Button>
+            <Button type="submit" form={category.id}>Update Category</Button>
           </DialogFooter>
         </DialogContent>
       </form>

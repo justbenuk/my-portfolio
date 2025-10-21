@@ -2,12 +2,22 @@ import { Dialog } from "../ui/dialog"
 import EditCategoryForm from "./edit-category-form"
 import NewCategoryForm from "./new-category-form"
 
-export default async function CategoryPopup({ type, id }: { type: string, id?: string }) {
+interface Category {
+  id: string
+  name: string
+  slug: string
+  type: string
+  description: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export default function CategoryPopup({ type, category }: { type: string, category: Category }) {
 
   if (type === 'edit') {
     return (
       <Dialog>
-        <EditCategoryForm />
+        <EditCategoryForm category={category} />
       </Dialog>
     )
   }

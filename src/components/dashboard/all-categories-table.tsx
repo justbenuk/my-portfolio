@@ -3,11 +3,14 @@ import { createColumnHelper, getCoreRowModel, getFilteredRowModel, getPagination
 import GlobalTableSearch from "../tables/global-table-search"
 import GlobalTable from "../tables/global-table"
 import GlobalTablePagination from "../tables/global-table-pagination"
+import CategoryPopup from "./category-popup"
+import DeleteCategory from "./delete-category"
 
 interface CategoryProps {
   id: string
   name: string
-  description: string | null
+  slug: string
+  description: string
   type: string
   createdAt: Date
   updatedAt: Date
@@ -21,9 +24,7 @@ interface CategoriesProps {
 export default function AllCategoriesTable({ categories }: CategoriesProps) {
 
   const data = categories || []
-
   const columnHelper = createColumnHelper<CategoryProps>()
-
   const columns = [
     columnHelper.accessor('name', {
       cell: info => info.getValue()
@@ -42,6 +43,18 @@ export default function AllCategoriesTable({ categories }: CategoriesProps) {
       header: 'Updated At',
       cell: info => info.getValue().toLocaleDateString("en-GB")
     }),
+    columnHelper.display({
+      id: 'actions',
+      header: 'Actions',
+      cell: info => {
+        return (
+          <div className="flex flex-row items-center gap-2">
+            <CategoryPopup type="edit" category={info.row.original} />
+            <DeleteCategory categoryId={info.row.original.id} />
+          </div>
+        )
+      }
+    })
   ]
 
   const table = useReactTable({
