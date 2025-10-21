@@ -3,6 +3,8 @@ import AllCategoriesTable from "@/components/dashboard/all-categories-table";
 import CategoryPopup from "@/components/dashboard/category-popup";
 import DashboardTitle from "@/components/dashboard/dashboard-title";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CategoryPage() {
   const categories = await fetchAllCategories()
   if (!categories) return null

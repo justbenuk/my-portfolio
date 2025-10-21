@@ -2,6 +2,8 @@ import { getDashboardStats, getRecentPosts } from "@/actions/dashboard-actions";
 import RecentPostsTable from "@/components/dashboard/recent-posts-table";
 import { FileText, Briefcase, Users, Eye } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
 
   const recentPosts = await getRecentPosts()

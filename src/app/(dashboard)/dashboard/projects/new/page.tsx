@@ -3,6 +3,8 @@ import Link from "next/link";
 import NewProjectForm from "@/forms/dashboard/new-project-form";
 import { fetchAllCategorysByType } from "@/actions/category-actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function NewProjectPage() {
   const categories = await fetchAllCategorysByType('work')
   console.log(categories)

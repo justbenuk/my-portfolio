@@ -3,6 +3,8 @@ import { MessageSquare, CheckCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { approveCommentAction, deleteCommentAction } from "@/actions/comment-actions";
 
+export const dynamic = 'force-dynamic';
+
 async function ApproveButton({ commentId }: { commentId: string }) {
   async function handleApprove() {
     "use server";

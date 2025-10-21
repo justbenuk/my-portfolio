@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth";
 import { LayoutDashboard, User, Clock } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default async function PortalPage() {
   const session = await auth();
 

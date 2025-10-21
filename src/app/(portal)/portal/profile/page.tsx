@@ -3,6 +3,8 @@ import ProfileForm from "@/forms/portal/profile-form";
 import { User, Mail, Shield, Info } from "lucide-react";
 import Image from "next/image";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProfilePage() {
   const session = await auth();
 
