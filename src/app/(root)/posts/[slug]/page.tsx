@@ -9,7 +9,7 @@ import Image from "next/image";
 import DOMPurify from "isomorphic-dompurify"
 import { fetchSinglePostBySlug } from "@/actions/posts-actions";
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
   const post = await fetchSinglePostBySlug(slug)

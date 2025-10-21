@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditPostPage({ params }: { params: { id: string } }) {
-  const id = await params
-  const post = await fetchSinglePostById(id)
+export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params
+  const post = await fetchSinglePostById(resolvedParams)
   const categories = await fetchAllCategorysByType('post')
   if (!post) return null
 

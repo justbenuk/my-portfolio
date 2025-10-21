@@ -6,11 +6,12 @@ import PostsPagination from "@/components/shared/posts-pagination";
 import Image from "next/image";
 
 interface BlogPageProps {
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string }>;
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const currentPage = Number(searchParams.page) || 1;
+  const { page } = await searchParams;
+  const currentPage = Number(page) || 1;
   const postsPerPage = 9;
   const skip = (currentPage - 1) * postsPerPage;
 

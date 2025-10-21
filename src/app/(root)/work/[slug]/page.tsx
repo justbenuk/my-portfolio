@@ -36,7 +36,7 @@ function isChallengeArray(value: JsonValue): value is Challenge[] {
   );
 }
 
-export async function generatedMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
 
   const project = await db.project.findUnique({
@@ -51,10 +51,11 @@ export async function generatedMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export default async function ProjectPage({ params }: Props) {
+  const { slug } = await params
   const project = await db.project.findUnique({
     where: {
-      slug: params.slug,
+      slug: slug,
       published: true,
     },
   });
