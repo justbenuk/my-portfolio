@@ -6,7 +6,6 @@ import { db } from "@/lib/db";
 import CommentForm from "@/components/shared/comment-form";
 import CommentsList from "@/components/shared/comments-list";
 import Image from "next/image";
-import DOMPurify from "isomorphic-dompurify"
 import { fetchSinglePostBySlug } from "@/actions/posts-actions";
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -35,7 +34,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     },
   });
 
-  const sanitizedHtml = DOMPurify.sanitize(post.content)
 
 
   return (
@@ -104,7 +102,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Article Content */}
           <div className="prose prose-invert prose-lg max-w-none animate-fade-in-up animation-delay-600">
             <div className="space-y-6 text-slate-300 leading-relaxed">
-              <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} className="mt-10" />
             </div>
           </div>
 
