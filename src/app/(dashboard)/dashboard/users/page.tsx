@@ -63,6 +63,8 @@ export default async function UsersPage() {
                               src={user.image}
                               alt={user.name}
                               className="w-full h-full rounded-full object-cover"
+                              width={400}
+                              height={400}
                             />
                           ) : (
                             <User className="w-5 h-5 text-white" />

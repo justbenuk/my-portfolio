@@ -8,7 +8,7 @@ interface SeperateImageUploadProps {
 
 export default function ProfileImageUploader({ onImageUpload }: SeperateImageUploadProps) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between">
       <UploadButton
         endpoint="profileUploader"
         config={{ cn: twMerge }}

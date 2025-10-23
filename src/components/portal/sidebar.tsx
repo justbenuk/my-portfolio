@@ -43,7 +43,7 @@ export default function PortalSidebar({ user }: SidebarProps) {
       <SidebarHeader className="bg-slate-900">
         <div className="p-6 border-b border-slate-800">
           <h1 className="text-xl font-bold text-white">Client Portal</h1>
-          <p className="text-sm text-slate-400 mt-1">Welcome back</p>
+          <span className="text-sm text-slate-400 mt-1">Welcome back</span>
         </div>
       </SidebarHeader>
       {/* Sidebar */}
@@ -56,9 +56,9 @@ export default function PortalSidebar({ user }: SidebarProps) {
               <AvatarImage src={user.image as string} />
               <AvatarFallback className="bg-gradient-to-br from-teal-500 to-cyan-500">BA</AvatarFallback>
             </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{user.name}</p>
-              <p className="text-xs text-slate-400 truncate">{user.email}</p>
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-medium text-white truncate">{user.name}</span>
+              <span className="text-xs text-slate-400 truncate">{user.email}</span>
             </div>
           </div>
         </div>

@@ -28,9 +28,9 @@ export default async function PortalPage() {
         <h1 className="text-3xl font-bold text-white mb-2">
           Dashboard
         </h1>
-        <p className="text-slate-400">
+        <span className="text-slate-400">
           Welcome back, {session?.user?.name}
-        </p>
+        </span>
       </div>
 
       {/* Stats Grid */}
@@ -46,9 +46,9 @@ export default async function PortalPage() {
                 <div className={`${stat.color}`}>
                   <Icon className="w-8 h-8" />
                 </div>
-                <div>
-                  <p className="text-sm text-slate-400">{stat.name}</p>
-                  <p className="text-2xl font-bold text-white">{stat.value}</p>
+                <div className="flex flex-col">
+                  <span className="text-sm text-slate-400">{stat.name}</span>
+                  <span className="text-2xl font-bold text-white">{stat.value}</span>
                 </div>
               </div>
             </div>
@@ -66,10 +66,10 @@ export default async function PortalPage() {
             <h2 className="text-xl font-bold text-white mb-2">
               Welcome to Your Portal
             </h2>
-            <p className="text-slate-400">
+            <span className="text-slate-400">
               This is your personal dashboard where you can manage your account and access various features.
               Use the sidebar to navigate between different sections.
-            </p>
+            </span>
           </div>
         </div>
       </div>
