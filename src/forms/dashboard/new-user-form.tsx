@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { createUserSchema } from "@/validators/dashboard-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Mail, Lock, Shield, Image, Save } from "lucide-react";
+import { User, Mail, Lock, Shield, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
