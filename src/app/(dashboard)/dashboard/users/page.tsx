@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus, Edit, Trash2, Shield, ShieldCheck, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export const dynamic = 'force-dynamic';
 
@@ -58,7 +59,7 @@ export default async function UsersPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
                           {user.image ? (
-                            <img
+                            <Image
                               src={user.image}
                               alt={user.name}
                               className="w-full h-full rounded-full object-cover"
@@ -78,11 +79,10 @@ export default async function UsersPage() {
                     </td>
                     <td className="p-4">
                       <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
-                          user.role === "admin"
-                            ? "bg-purple-500/10 text-purple-400"
-                            : "bg-cyan-500/10 text-cyan-400"
-                        }`}
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${user.role === "admin"
+                          ? "bg-purple-500/10 text-purple-400"
+                          : "bg-cyan-500/10 text-cyan-400"
+                          }`}
                       >
                         {user.role === "admin" ? (
                           <>
@@ -99,11 +99,10 @@ export default async function UsersPage() {
                     </td>
                     <td className="p-4">
                       <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
-                          user.emailVerified
-                            ? "bg-green-500/10 text-green-400"
-                            : "bg-yellow-500/10 text-yellow-400"
-                        }`}
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${user.emailVerified
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-yellow-500/10 text-yellow-400"
+                          }`}
                       >
                         {user.emailVerified ? "Verified" : "Unverified"}
                       </span>

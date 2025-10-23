@@ -19,7 +19,6 @@ import PostImageUploader from "@/components/images/post-image-uploader";
 import Editor from "@/components/shared/editor";
 import { CategoryListProps } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Category } from "@prisma/client";
 
 interface PostProps {
   post: {

@@ -163,7 +163,6 @@ export default function NewUserForm() {
                   <Field>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Image className="w-4 h-4 text-slate-500" />
                       </div>
                       <Input
                         {...field}
