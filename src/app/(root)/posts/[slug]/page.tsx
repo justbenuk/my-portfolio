@@ -7,6 +7,7 @@ import CommentForm from "@/components/shared/comment-form";
 import CommentsList from "@/components/shared/comments-list";
 import Image from "next/image";
 import { fetchSinglePostBySlug } from "@/actions/posts-actions";
+import EditorContent from "@/components/shared/editer-content";
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -102,6 +103,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Article Content */}
           <div className="prose prose-invert prose-lg max-w-none animate-fade-in-up animation-delay-600">
             <div className="space-y-6 text-slate-300 leading-relaxed">
+              <EditorContent content={post.content} />
             </div>
           </div>
 

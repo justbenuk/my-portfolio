@@ -63,7 +63,7 @@ export default function DashboardSidebar({ user }: SidebarProps) {
       <SidebarHeader className="bg-slate-900">
         <div className="p-6 border-b border-slate-800">
           <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
-          <p className="text-sm text-slate-400 mt-1">Content Management</p>
+          <span className="text-sm text-slate-400 mt-1">Content Management</span>
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-slate-900">
