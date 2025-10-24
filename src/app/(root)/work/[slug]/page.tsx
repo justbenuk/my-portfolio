@@ -1,10 +1,11 @@
 import PageContainer from "@/components/shared/page-container";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Github, Calendar, Tag } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Calendar, Tag, } from "lucide-react";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { Metadata } from "next";
 import { JsonValue } from "@prisma/client/runtime/library";
+import Image from "next/image";
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -132,6 +133,9 @@ export default async function ProjectPage({ params }: Props) {
         {/* Project Image */}
         <div className="relative rounded-2xl overflow-hidden aspect-video bg-slate-800 animate-fade-in-up animation-delay-400">
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent z-10" />
+          {project.image && (
+            <Image src={project.image} alt="Project Image" width={3000} height={3000} className="w-full h-full" />
+          )}
         </div>
 
         {/* Project Content */}

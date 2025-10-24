@@ -3,7 +3,7 @@ import PageContainer from "@/components/shared/page-container";
 import Link from "next/link";
 import { ExternalLink, Github } from "lucide-react";
 import { db } from "@/lib/db";
-
+import Image from 'next/image';
 export const metadata: Metadata = {
   title: 'My Work'
 };
@@ -83,7 +83,10 @@ export default async function WorkPage() {
               >
                 <div className="aspect-video relative overflow-hidden bg-slate-800">
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent z-10" />
-                  <div className="absolute inset-0 bg-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
+                  {project.image && (
+                    <Image src={project.image} alt="Project Image" width={3000} height={3000} className="w-full h-full" />
+                  )}
+
                 </div>
 
                 <div className="p-6 space-y-4">
@@ -138,7 +141,10 @@ export default async function WorkPage() {
               >
                 <div className="aspect-video relative overflow-hidden bg-slate-800">
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent z-10" />
-                  <div className="absolute inset-0 bg-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
+                  {project.image && (
+                    <Image src={project.image} alt="Project Image" width={3000} height={3000} className="w-full h-full" />
+                  )}
+
                 </div>
 
                 <div className="p-6 space-y-3">
