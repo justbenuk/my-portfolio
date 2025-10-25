@@ -15,6 +15,6 @@ export async function removeImageById(imageUrl: string) {
     //remove image from upload thing 
     await utapi.deleteFiles(imageKey)
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

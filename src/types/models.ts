@@ -48,8 +48,8 @@ export interface Project {
   featured: boolean;
 
   // Media
-  image?: string;
-  imageAlt?: string;
+  image?: string | null;
+  imageAlt?: string | null;
   gallery: string[];
 
   // Project details
@@ -57,19 +57,19 @@ export interface Project {
   tags: string[];
 
   // Links
-  liveUrl?: string;
-  githubUrl?: string;
-  caseStudyUrl?: string;
+  liveUrl?: string | null;
+  githubUrl?: string | null;
+  caseStudyUrl?: string | null;
 
   // Features and challenges
-  features?: string[];
-  technologies?: Technology[];
-  challenges?: Challenge[];
+  features?: unknown;
+  technologies?: unknown;
+  challenges?: unknown;
 
   // Metadata
-  client?: string;
-  duration?: string;
-  completedAt?: Date;
+  client?: string | null;
+  duration?: string | null;
+  completedAt?: Date | null;
 
   // Stats
   views: number;

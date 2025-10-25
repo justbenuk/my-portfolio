@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { Metadata } from "next";
 import { JsonValue } from "@prisma/client/runtime/library";
 import Image from "next/image";
+import EditorContent from "@/components/shared/editer-content";
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -146,11 +147,7 @@ export default async function ProjectPage({ params }: Props) {
             <div className="space-y-4 animate-fade-in-up animation-delay-600">
               <h2 className="text-3xl font-bold text-white">About This Project</h2>
               <div className="prose prose-invert max-w-none">
-                {project.fullDescription.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="text-slate-300 leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))}
+                <EditorContent content={project.fullDescription} />
               </div>
             </div>
 

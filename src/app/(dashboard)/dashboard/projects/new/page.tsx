@@ -7,7 +7,6 @@ export const dynamic = 'force-dynamic';
 
 export default async function NewProjectPage() {
   const categories = await fetchAllCategorysByType('work')
-  console.log(categories)
   return (
     <div className="p-6 lg:p-8">
       {/* Header */}

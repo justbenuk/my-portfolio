@@ -27,7 +27,6 @@ interface CategoryProps {
 }
 
 export default function EditCategoryForm({ category }: CategoryProps) {
-  console.log(category)
   const form = useForm<z.infer<typeof createcategorySchema>>({
     resolver: zodResolver(createcategorySchema),
     defaultValues: {
