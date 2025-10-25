@@ -13,6 +13,7 @@ export default function MainMenuList() {
     { href: "/services", label: "Services", icon: Wrench },
     { href: "/posts", label: "Blog", icon: BookOpen },
     { href: "/work", label: "My Work", icon: Briefcase },
+    { href: "/watch-me", label: "Watch Me", icon: Briefcase },
     { href: "/contact", label: "Contact Me", icon: Mail },
   ];
 
@@ -30,8 +31,8 @@ export default function MainMenuList() {
             key={item.href}
             href={item.href}
             className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive
-                ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/30"
-                : "bg-white/5 backdrop-blur-sm border border-white/10 hover:border-teal-500/50 hover:bg-white/10 text-slate-300"
+              ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/30"
+              : "bg-white/5 backdrop-blur-sm border border-white/10 hover:border-teal-500/50 hover:bg-white/10 text-slate-300"
               }`}
           >
             <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? "" : "group-hover:scale-110"}`} />

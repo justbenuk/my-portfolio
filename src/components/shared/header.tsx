@@ -55,6 +55,13 @@ export default function Header() {
               Posts
             </Link>
             <Link
+              href="/watch-me"
+
+              className="text-slate-300 hover:text-teal-400 transition-colors duration-200 font-medium"
+            >
+              Watch Me
+            </Link>
+            <Link
               href="/contact"
               className="px-6 py-2 text-sm font-semibold text-white bg-gradient-to-r from-teal-500 to-cyan-500 rounded-lg shadow-lg shadow-teal-500/20 transition-all duration-300 hover:shadow-teal-500/40 hover:scale-105"
             >
