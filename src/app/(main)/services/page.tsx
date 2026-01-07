@@ -1,10 +1,9 @@
 import ServiceCard from '@/components/service-card';
-import Pagecontainer from '@/components/shared/page-container';
 import { Code2, Layout, Zap, Database, Globe, Cloud } from 'lucide-react';
 
 export default function ServicesPage() {
   return (
-    <Pagecontainer className="py-12 md:py-20">
+    <div className="py-12 md:py-20">
       <h1 className="text-4xl md:text-6xl font-extrabold text-center mb-16 leading-tight">
         My <span className="text-orange-400 italic">Services.</span> <br />
         Bringing Your Ideas to Life.
@@ -42,6 +41,6 @@ export default function ServicesPage() {
           description="Setting up efficient and reliable deployment pipelines and hosting solutions on platforms like Vercel and Netlify."
         />
       </div>
-    </Pagecontainer>
+    </div>
   );
 }

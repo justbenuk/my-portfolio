@@ -1,3 +1,4 @@
+import FrontContactForm from '@/forms/contact/front-contact-form';
 import { Mail, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa6';
@@ -6,7 +7,7 @@ export default function ContactPage() {
   return (
     <div className="py-12 md:py-20">
       <h1 className="text-4xl md:text-6xl font-extrabold text-center mb-16 leading-tight">
-        Let's <span className="text-orange-400 italic">Connect.</span> <br />
+        Let&apos;s <span className="text-orange-400 italic">Connect.</span> <br />
         Start Your Next Project.
       </h1>
 
@@ -14,43 +15,7 @@ export default function ContactPage() {
         {/* Contact Form */}
         <div className="bg-dark-card p-10 rounded-2xl border border-dark-border shadow-lg">
           <h2 className="text-3xl font-semibold mb-8 text-white">Send Me a Message</h2>
-          <form className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-gray-300 text-sm font-medium mb-2">Name</label>
-              <input 
-                type="text" 
-                id="name" 
-                name="name" 
-                className="w-full p-3 rounded-lg bg-dark-bg border border-dark-border focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none text-white" 
-                placeholder="Your Name"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-gray-300 text-sm font-medium mb-2">Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                className="w-full p-3 rounded-lg bg-dark-bg border border-dark-border focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none text-white" 
-                placeholder="you@example.com"
-              />
-            </div>
-            <div>
-              <label htmlFor="message" className="block text-gray-300 text-sm font-medium mb-2">Message</label>
-              <textarea 
-                id="message" 
-                name="message"  
-                className="w-full p-3 rounded-lg bg-dark-bg border border-dark-border focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none text-white resize-y" 
-                placeholder="Tell me about your project or inquiry..."
-              ></textarea>
-            </div>
-            <button 
-              type="submit" 
-              className="w-full bg-orange-400 hover:bg-orange-600 text-dark-bg px-6 py-3 rounded-full font-bold transition-all text-lg"
-            >
-              Send Message
-            </button>
-          </form>
+          <FrontContactForm />
         </div>
 
         {/* Contact Information & Socials */}
@@ -60,7 +25,7 @@ export default function ContactPage() {
             <div>
               <h3 className="text-2xl font-semibold mb-1">Email Me</h3>
               <p className="text-gray-400">
-                <a href="mailto:your.email@example.com" className="hover:text-orange-accent transition-colors">justbenuk@gmail.com</a>
+                <a href="mailto:justbenuk@pm.me" className="hover:text-orange-accent transition-colors">justbenuk@pm.me</a>
               </p>
             </div>
           </div>

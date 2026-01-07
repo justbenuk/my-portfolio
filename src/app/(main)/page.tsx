@@ -1,14 +1,12 @@
 import BlogPostCard from '@/components/blog-post-card';
 import ProjectCard from '@/components/project-card';
 import ServiceCard from '@/components/service-card';
-import Pagecontainer from '@/components/shared/page-container';
 import { ArrowRight, Code2, Layout, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 export default function HomePage() {
   return (
-    <Pagecontainer>
-      {/* Hero Section */}
+    <>
       <section className="text-center py-20 md:py-32 mb-20">
         <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight animate-fade-in-up">
           Building Digital Solutions <br />
@@ -26,44 +24,39 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* Featured Services Section */}
       <section className="mb-20">
         <h2 className="text-sm uppercase tracking-[0.3em] text-orange-400 mb-12 text-center font-extrabold animate-fade-in-up">My Expertise</h2>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <ServiceCard 
-            icon={<Code2 />} 
-            title="Custom Web Apps" 
+          <ServiceCard
+            icon={<Code2 />}
+            title="Custom Web Apps"
             description="Full-stack development using Next.js, React, and robust APIs for scalable and performant applications."
           />
-          <ServiceCard 
-            icon={<Layout />} 
-            title="UI/UX Design" 
+          <ServiceCard
+            icon={<Layout />}
+            title="UI/UX Design"
             description="Crafting intuitive and engaging user interfaces that prioritize user experience and aesthetic appeal."
           />
-          <ServiceCard 
-            icon={<Zap />} 
-            title="Performance Optimization" 
+          <ServiceCard
+            icon={<Zap />}
+            title="Performance Optimization"
             description="Transforming slow, clunky sites into lightning-fast, highly optimized web experiences."
           />
         </div>
       </section>
 
-      {/* Featured Project Section (Example) */}
       <section className="mb-20">
         <h2 className="text-sm uppercase tracking-[0.3em] text-orange-400 mb-12 text-center font-extrabold animate-fade-in-up">Featured Project</h2>
         <div className="max-w-3xl mx-auto">
           <ProjectCard
             title="SaaS Dashboard Redesign"
             description="A complete overhaul of a legacy SaaS platform dashboard, improving user experience and adding new analytics features."
-            imageSrc="/project-dashboard.jpg" // Add an image to public folder
+            imageSrc="/assets/image4.jpg"
             tags={['Next.js', 'TypeScript', 'Tailwind CSS', 'API Integration']}
-            link="/portfolio/saas-dashboard"
+            link="/assets/image4.jpg"
           />
         </div>
       </section>
-
-      {/* Latest Blog Post Section (Example) */}
       <section className="mb-20">
         <h2 className="text-sm uppercase tracking-[0.3em] text-orange-400 mb-12 text-center font-extrabold animate-fade-in-up">Latest Insights</h2>
         <div className="max-w-3xl mx-auto">
@@ -75,6 +68,7 @@ export default function HomePage() {
           />
         </div>
       </section>
-    </Pagecontainer>
+    </>
+
   );
 }

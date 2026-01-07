@@ -1,9 +1,8 @@
-import Pagecontainer from '@/components/shared/page-container';
 import { Sparkles, Code } from 'lucide-react';
 
 export default function AboutPage() {
   return (
-    <Pagecontainer className="py-12 md:py-20">
+    <div className="py-12 md:py-20">
       <h1 className="text-4xl md:text-6xl font-extrabold text-center mb-16 leading-tight">
         Passionate about Code, <br /> Driven by <span className="text-orange-400 italic">Curiosity.</span>
       </h1>
@@ -56,6 +55,6 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-    </Pagecontainer>
+    </div>
   );
 }

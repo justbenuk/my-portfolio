@@ -5,42 +5,42 @@ export default function PortfolioPage() {
     {
       title: "SaaS Dashboard Redesign",
       description: "A complete overhaul of a legacy SaaS platform dashboard, improving user experience and adding new analytics features.",
-      imageSrc: "/project-dashboard.jpg",
+      imageSrc: "/assets/image2.jpg",
       tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'API Integration'],
       link: "/portfolio/saas-dashboard"
     },
     {
       title: "E-commerce Storefront",
       description: "Developed a modern e-commerce platform with Stripe integration and a custom product management system.",
-      imageSrc: "/project-ecommerce.jpg",
+      imageSrc: "/assets/image2.jpg",
       tags: ['React', 'Next.js', 'Stripe', 'GraphQL'],
       link: "/portfolio/ecommerce-store"
     },
     {
       title: "Real-time Chat Application",
       description: "Built a real-time chat application with WebSockets, offering instant messaging and user presence features.",
-      imageSrc: "/project-chat.jpg",
+      imageSrc: "/assets/image2.jpg",
       tags: ['Node.js', 'Socket.io', 'React', 'MongoDB'],
       link: "/portfolio/chat-app"
     },
     {
       title: "Portfolio Website Template",
       description: "Designed and developed a flexible portfolio template for designers and developers to showcase their work.",
-      imageSrc: "/project-template.jpg",
+      imageSrc: "/assets/image2.jpg",
       tags: ['Next.js', 'Tailwind CSS', 'Framer Motion'],
       link: "/portfolio/portfolio-template"
     },
     {
       title: "Task Management PWA",
       description: "A Progressive Web App for task management, featuring offline capabilities and push notifications.",
-      imageSrc: "/project-pwa.jpg",
+      imageSrc: "/assets/image2.jpg",
       tags: ['React', 'PWA', 'IndexedDB', 'Service Workers'],
       link: "/portfolio/task-manager-pwa"
     },
     {
       title: "Blog & CMS Integration",
       description: "Integrated a headless CMS (Sanity.io) with a Next.js blog, enabling easy content management.",
-      imageSrc: "/project-blog.jpg",
+      imageSrc: "/assets/image2.jpg",
       tags: ['Next.js', 'Sanity.io', 'GraphQL', 'MDX'],
       link: "/portfolio/blog-cms"
     },
