@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import MenuItem from './menu-item';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { FaBars } from 'react-icons/fa6';
 
 export default function Header() {
   return (
@@ -15,6 +17,27 @@ export default function Header() {
           <MenuItem href='/posts' name='Blog' />
           <MenuItem href='/contact' name='Contact' />
         </nav>
+        <Sheet>
+          <SheetTrigger className='lg:hidden'>
+            <FaBars />
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle className='text-orange-400 font-semibold leading-tight'>Ben Andrews</SheetTitle>
+              <SheetDescription>
+                Welcome to my portfolio
+              </SheetDescription>
+            </SheetHeader>
+            <nav className="flex flex-col gap-6 font-medium text-gray-300 px-6 text-xl">
+              <MenuItem href='/about' name='About' />
+              <MenuItem href='/services' name='Services' />
+              <MenuItem href='/portfolio' name='Portfolio' />
+              <MenuItem href='/posts' name='Blog' />
+              <MenuItem href='/contact' name='Contact' />
+            </nav>
+
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );
