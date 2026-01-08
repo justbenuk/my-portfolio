@@ -2,13 +2,15 @@ import Link from 'next/link';
 import MenuItem from './menu-item';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
 import { FaBars } from 'react-icons/fa6';
+import Image from 'next/image';
 
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-dark-bg/80 backdrop-blur-md border-b border-dark-border py-4 px-6 md:px-8">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="text-orange-400 font-extrabold text-2xl tracking-tighter hover:text-orange-400 transition-colors">
-          Ben Andrews
+        <Link href="/" className="text-orange-400 font-extrabold text-2xl tracking-tighter hover:text-orange-400 transition-colors flex flex-row items-center space-x-2">
+          <Image src={'/assets/me.png'} alt='profile picture' height={30} width={30} className='rounded-full border-2 border-orange-400' />
+          <span className='hidden md:flex'>Ben Andrews</span>
         </Link>
         <nav className="hidden lg:flex gap-6 text-sm font-medium text-gray-300">
           <MenuItem href='/about' name='About' />
@@ -35,7 +37,6 @@ export default function Header() {
               <MenuItem href='/posts' name='Blog' />
               <MenuItem href='/contact' name='Contact' />
             </nav>
-
           </SheetContent>
         </Sheet>
       </div>
