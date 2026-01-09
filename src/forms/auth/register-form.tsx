@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { registerFormSchema } from "@/validators/auth-validators"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
@@ -28,6 +29,8 @@ export default function RgeisterForm() {
     }
   })
 
+  const router = useRouter()
+
   async function handleRegisterForm(values: z.infer<typeof registerFormSchema>) {
     const { success, message } = await RegisterUsserAction(values)
 
@@ -35,8 +38,11 @@ export default function RgeisterForm() {
       toast.error(message)
     } else {
       toast.success(message)
+      router.push('/client')
     }
   }
+
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
