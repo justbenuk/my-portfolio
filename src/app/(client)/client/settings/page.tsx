@@ -16,7 +16,7 @@ export default async function SettingsPage() {
         <span>Customisation & Settings</span>
       </div>
       <Separator />
-      <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="py-12 grid grid-cols-1 lg:grid-cols-4 gap-10">
         <div className="col-span-1">
           <h1 className="font-semibold">Theme Selector</h1>
           <span className="text-xs">Select which theme suits you day or night available</span>
@@ -39,7 +39,7 @@ export default async function SettingsPage() {
       <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div className="col-span-1">
           <h1 className="font-semibold">Session</h1>
-          <span className="text-xs">All active sessions</span>
+          <span className="text-xs">All active sessions. You can revoke any sessions you have active on other devices</span>
         </div>
         <div className="col-span-1 md:col-span-3">
           <ListSessions sessions={ sessions} />

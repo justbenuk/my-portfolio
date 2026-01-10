@@ -12,17 +12,21 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
+import { Input } from "./ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  searchKey: string;
+  searchKey?: string;
+  size: number
 }
 
 export function GlobalTable<TData, TValue>({
   columns,
   data,
   searchKey,
+  size,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -42,6 +46,10 @@ export function GlobalTable<TData, TValue>({
       sorting,
       columnFilters,
       globalFilter,
+      pagination: {
+        pageIndex: 0,
+        pageSize: size
+      }
     },
   });
 
@@ -49,7 +57,7 @@ export function GlobalTable<TData, TValue>({
     <div className="space-y-4">
       {/* SEARCH INPUT */}
       <div className="flex items-center py-4">
-        <input
+        <Input
           placeholder="Search all fields..."
           value={globalFilter ?? ""}
           onChange={(event) => table.setGlobalFilter(event.target.value)}
@@ -59,37 +67,37 @@ export function GlobalTable<TData, TValue>({
 
       {/* TABLE UI */}
       <div className="rounded-md border">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-gray-100">
+        <Table className="w-full text-sm text-left">
+          <TableHeader className="bg-gray-100">
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
+              <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="px-4 py-2 cursor-pointer" onClick={header.column.getToggleSortingHandler()}>
+                  <TableHead key={header.id} className="px-4 py-2 cursor-pointer" onClick={header.column.getToggleSortingHandler()}>
                     {flexRender(header.column.columnDef.header, header.getContext())}
                     {{ asc: " 🔼", desc: " 🔽" }[header.column.getIsSorted() as string] ?? null}
-                  </th>
+                  </TableHead>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </thead>
-          <tbody>
+          </TableHeader>
+          <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-t">
+                <TableRow key={row.id} className="border-t">
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-2">
+                    <TableCell key={cell.id} className="px-4 py-2">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
+                    </TableCell>
                   ))}
-                </tr>
+                </TableRow>
               ))
             ) : (
               <tr>
                 <td colSpan={columns.length} className="h-24 text-center">No results.</td>
               </tr>
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       {/* PAGINATION CONTROLS */}
