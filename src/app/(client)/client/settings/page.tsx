@@ -1,8 +1,14 @@
+import { fetchUsersCurrentSessions } from "@/actions/user-actions";
 import ListSessions from "@/components/client/settings/list-sessions";
 import ThemeSelector from "@/components/theme-selector";
 import { Separator } from "@/components/ui/separator";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+
+  const sessions = await fetchUsersCurrentSessions()
+
+  if(!sessions) return null
+  
   return (
     <div>
       <div className="mb-8">
@@ -36,7 +42,7 @@ export default function SettingsPage() {
           <span className="text-xs">All active sessions</span>
         </div>
         <div className="col-span-1 md:col-span-3">
-          <ListSessions />
+          <ListSessions sessions={ sessions} />
         </div>
       </div>
       <Separator />
@@ -52,4 +58,3 @@ export default function SettingsPage() {
     </div>
   )
 }
-
