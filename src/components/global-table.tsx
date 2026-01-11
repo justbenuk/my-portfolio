@@ -67,8 +67,8 @@ export function GlobalTable<TData, TValue>({
 
       {/* TABLE UI */}
       <div className="rounded-md border">
-        <Table className="w-full text-sm text-left">
-          <TableHeader className="bg-gray-100">
+        <Table className="w-full text-sm text-left rounded overflow-hidden">
+          <TableHeader className="bg-gray-100 dark:bg-gray-600">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

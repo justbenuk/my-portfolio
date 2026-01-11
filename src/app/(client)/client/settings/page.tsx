@@ -1,60 +1,58 @@
 import { fetchUsersCurrentSessions } from "@/actions/user-actions";
 import ListSessions from "@/components/client/settings/list-sessions";
 import ThemeSelector from "@/components/theme-selector";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function SettingsPage() {
 
   const sessions = await fetchUsersCurrentSessions()
 
-  if(!sessions) return null
-  
+  if (!sessions) return null
+
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="font-semibold text-xl md:text-3xl text-orange-400">Settings</h1>
-        <span>Customisation & Settings</span>
-      </div>
-      <Separator />
-      <div className="py-12 grid grid-cols-1 lg:grid-cols-4 gap-10">
-        <div className="col-span-1">
-          <h1 className="font-semibold">Theme Selector</h1>
-          <span className="text-xs">Select which theme suits you day or night available</span>
-        </div>
-        <div className="col-span-1 md:col-span-3">
+    <div className="space-y-12">
+      <Card className="flex flex-col lg:flex-row gap-10">
+        <CardHeader className="flex-auto">
+          <div>
+            <CardTitle>Theme Selector</CardTitle>
+            <CardDescription>Change between Light & Dark mode</CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
           <ThemeSelector />
-        </div>
-      </div>
-      <Separator />
-      <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
-        <div className="col-span-1">
-          <h1 className="font-semibold">Two Factor</h1>
-          <span className="text-xs">Protect your account by enabling two factor authentication</span>
-        </div>
-        <div className="col-span-1 md:col-span-3">
+        </CardContent>
+      </Card>
+      <Card className="flex flex-col lg:flex-row gap-10">
+        <CardHeader className="flex-auto">
+          <div>
+            <CardTitle>Two Factor</CardTitle>
+            <CardDescription>Secure your account with Two factor authentication</CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
           <p>Coming soon</p>
-        </div>
-      </div>
-      <Separator />
-      <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
-        <div className="col-span-1">
-          <h1 className="font-semibold">Session</h1>
-          <span className="text-xs">All active sessions. You can revoke any sessions you have active on other devices</span>
-        </div>
-        <div className="col-span-1 md:col-span-3">
-          <ListSessions sessions={ sessions} />
-        </div>
-      </div>
-      <Separator />
-      <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
-        <div className="col-span-1">
-          <h1 className="font-semibold">Delete Account</h1>
-          <span className="text-xs">Delete your account and all associated information</span>
-        </div>
-        <div className="col-span-1 md:col-span-3">
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Current Active Sessions</CardTitle>
+          <CardDescription>Remove access to any devices your are signed in on</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ListSessions sessions={sessions} />
+        </CardContent>
+      </Card>
+      <Card className="flex flex-col lg:flex-row gap-10">
+        <CardHeader className="flex-auto">
+          <div>
+            <CardTitle>Delete Account</CardTitle>
+            <CardDescription>Delete your Account</CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
           <p>Coming soon</p>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

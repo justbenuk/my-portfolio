@@ -12,12 +12,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { loginFormSchema } from "@/validators/auth-validators"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
 
 
 export default function LoginForm() {
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -33,6 +35,7 @@ export default function LoginForm() {
       toast.error(message)
     } else {
       toast.success(message)
+      router.push('/client')
     }
   }
   return (
